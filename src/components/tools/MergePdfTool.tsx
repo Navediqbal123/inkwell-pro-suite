@@ -83,14 +83,14 @@ const MergePdfTool = ({ onClose }: MergePdfToolProps) => {
 
         {/* Sortable file list */}
         {files.length > 0 && (
-          <div className="space-y-2">
-            <p className="text-sm text-muted-foreground">
+          <div className="space-y-3">
+            <p className="text-sm text-muted-foreground font-medium">
               Drag to reorder files
             </p>
             {files.map((file, index) => (
               <div
                 key={`${file.name}-${index}`}
-                className="flex items-center gap-3 p-3 rounded-lg bg-secondary/50 animate-scale-in cursor-move group"
+                className="flex items-center gap-3 p-4 rounded-xl bg-secondary/40 border border-border/30 animate-scale-in cursor-move group hover:bg-secondary/60 transition-all duration-200"
                 draggable
                 onDragStart={(e) => {
                   e.dataTransfer.setData('text/plain', index.toString());
@@ -102,16 +102,16 @@ const MergePdfTool = ({ onClose }: MergePdfToolProps) => {
                   moveFile(from, index);
                 }}
               >
-                <GripVertical className="w-4 h-4 text-muted-foreground group-hover:text-foreground transition-colors" />
-                <span className="w-6 h-6 flex items-center justify-center rounded bg-primary/20 text-primary text-xs font-medium">
+                <GripVertical className="w-5 h-5 text-muted-foreground group-hover:text-foreground transition-colors" />
+                <span className="w-7 h-7 flex items-center justify-center rounded-lg bg-primary/20 border border-primary/30 text-primary text-sm font-bold">
                   {index + 1}
                 </span>
-                <p className="flex-1 text-sm font-medium text-foreground truncate">
+                <p className="flex-1 text-sm font-semibold text-foreground truncate">
                   {file.name}
                 </p>
                 <button
                   onClick={() => handleRemoveFile(index)}
-                  className="text-xs text-muted-foreground hover:text-destructive transition-colors"
+                  className="px-3 py-1 text-xs font-medium text-muted-foreground hover:text-destructive hover:bg-destructive/10 rounded-lg transition-all"
                 >
                   Remove
                 </button>
@@ -123,9 +123,9 @@ const MergePdfTool = ({ onClose }: MergePdfToolProps) => {
         <button
           onClick={handleMerge}
           disabled={files.length < 2}
-          className="w-full flex items-center justify-center gap-2 py-3 px-6 rounded-xl bg-primary text-primary-foreground font-medium disabled:opacity-50 disabled:cursor-not-allowed hover:bg-primary/90 transition-colors duration-200 ripple"
+          className="w-full btn-premium flex items-center justify-center gap-2 py-4 text-primary-foreground font-semibold disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none ripple"
         >
-          <Download className="w-5 h-5" />
+          <Download className="w-5 h-5" strokeWidth={2} />
           Merge PDFs
         </button>
       </div>

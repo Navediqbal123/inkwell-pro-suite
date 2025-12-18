@@ -93,7 +93,7 @@ const CompressPdfTool = ({ onClose }: CompressPdfToolProps) => {
 
         {/* Compression level */}
         <div>
-          <label className="block text-sm text-muted-foreground mb-3">
+          <label className="block text-sm text-muted-foreground font-medium mb-4">
             Compression Level
           </label>
           <div className="grid grid-cols-3 gap-3">
@@ -101,13 +101,15 @@ const CompressPdfTool = ({ onClose }: CompressPdfToolProps) => {
               <button
                 key={option.value}
                 onClick={() => setCompressionLevel(option.value)}
-                className={`p-4 rounded-xl border text-center transition-all duration-200 ${
+                className={`p-4 rounded-xl border text-center transition-all duration-300 ${
                   compressionLevel === option.value
-                    ? 'bg-primary/10 border-primary text-primary'
-                    : 'bg-secondary border-border text-foreground hover:border-primary/50'
+                    ? 'bg-primary/15 border-primary/50 shadow-lg shadow-primary/10'
+                    : 'bg-secondary/40 border-border/30 hover:border-primary/30 hover:bg-secondary/60'
                 }`}
               >
-                <p className="font-medium">{option.label}</p>
+                <p className={`font-bold ${compressionLevel === option.value ? 'text-primary' : 'text-foreground'}`}>
+                  {option.label}
+                </p>
                 <p className="text-xs text-muted-foreground mt-1">
                   {option.description}
                 </p>
@@ -119,9 +121,9 @@ const CompressPdfTool = ({ onClose }: CompressPdfToolProps) => {
         <button
           onClick={handleCompress}
           disabled={files.length === 0}
-          className="w-full flex items-center justify-center gap-2 py-3 px-6 rounded-xl bg-primary text-primary-foreground font-medium disabled:opacity-50 disabled:cursor-not-allowed hover:bg-primary/90 transition-colors duration-200 ripple"
+          className="w-full btn-premium flex items-center justify-center gap-2 py-4 text-primary-foreground font-semibold disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none ripple"
         >
-          <Download className="w-5 h-5" />
+          <Download className="w-5 h-5" strokeWidth={2} />
           Compress PDF
         </button>
       </div>

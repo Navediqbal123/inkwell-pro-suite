@@ -79,7 +79,7 @@ const FileDropzone = ({
       <label
         onDrop={handleDrop}
         onDragOver={(e) => e.preventDefault()}
-        className="relative flex flex-col items-center justify-center w-full h-48 border-2 border-dashed border-border hover:border-primary/50 rounded-xl cursor-pointer transition-colors duration-300 group"
+        className="relative flex flex-col items-center justify-center w-full h-52 border-2 border-dashed border-border/60 hover:border-primary/50 rounded-2xl cursor-pointer transition-all duration-300 group bg-secondary/20 hover:bg-secondary/30"
       >
         <input
           type="file"
@@ -88,16 +88,19 @@ const FileDropzone = ({
           onChange={handleChange}
           className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
         />
-        <div className="flex flex-col items-center gap-3 pointer-events-none">
-          <div className="p-4 rounded-full bg-primary/10 group-hover:bg-primary/20 transition-colors duration-300">
-            <Upload className="w-8 h-8 text-primary" />
+        <div className="flex flex-col items-center gap-4 pointer-events-none">
+          <div className="relative">
+            <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-primary/30 to-accent/30 blur-xl opacity-0 group-hover:opacity-60 transition-opacity duration-500" />
+            <div className="relative p-5 rounded-2xl bg-gradient-to-br from-primary/15 to-accent/15 border border-primary/20 group-hover:border-primary/40 transition-all duration-300">
+              <Upload className="w-8 h-8 text-primary group-hover:scale-110 transition-transform duration-300" strokeWidth={1.5} />
+            </div>
           </div>
           <div className="text-center">
-            <p className="text-foreground font-medium">
+            <p className="text-foreground font-semibold text-lg">
               Drop files here or click to upload
             </p>
-            <p className="text-sm text-muted-foreground mt-1">
-              {accept.split(',').join(', ')}
+            <p className="text-sm text-muted-foreground mt-2">
+              Supports {accept.split(',').join(', ')}
             </p>
           </div>
         </div>
@@ -109,22 +112,24 @@ const FileDropzone = ({
           {files.map((file, index) => (
             <div
               key={`${file.name}-${index}`}
-              className="flex items-center gap-3 p-3 rounded-lg bg-secondary/50 animate-scale-in"
+              className="flex items-center gap-4 p-4 rounded-xl bg-secondary/40 border border-border/30 animate-scale-in"
             >
-              {getFileIcon(file)}
+              <div className="p-2 rounded-lg bg-primary/10 border border-primary/20">
+                {getFileIcon(file)}
+              </div>
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-foreground truncate">
+                <p className="text-sm font-semibold text-foreground truncate">
                   {file.name}
                 </p>
-                <p className="text-xs text-muted-foreground">
+                <p className="text-xs text-muted-foreground mt-0.5">
                   {formatFileSize(file.size)}
                 </p>
               </div>
               <button
                 onClick={() => onRemoveFile(index)}
-                className="p-1.5 rounded-lg hover:bg-destructive/20 transition-colors duration-200"
+                className="p-2 rounded-lg hover:bg-destructive/20 border border-transparent hover:border-destructive/30 transition-all duration-200 group"
               >
-                <X className="w-4 h-4 text-muted-foreground hover:text-destructive" />
+                <X className="w-4 h-4 text-muted-foreground group-hover:text-destructive transition-colors" />
               </button>
             </div>
           ))}
