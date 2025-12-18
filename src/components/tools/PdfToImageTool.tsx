@@ -52,16 +52,18 @@ const PdfToImageTool = ({ onClose }: PdfToImageToolProps) => {
           onRemoveFile={handleRemoveFile}
         />
 
-        <p className="text-sm text-muted-foreground text-center">
-          Select a PDF file to convert to images
-        </p>
+        <div className="p-4 rounded-xl bg-secondary/40 border border-border/30">
+          <p className="text-sm text-muted-foreground text-center">
+            Select a PDF file to convert each page to a high-quality image
+          </p>
+        </div>
 
         <button
           onClick={handleConvert}
           disabled={files.length === 0}
-          className="w-full flex items-center justify-center gap-2 py-3 px-6 rounded-xl bg-primary text-primary-foreground font-medium disabled:opacity-50 disabled:cursor-not-allowed hover:bg-primary/90 transition-colors duration-200 ripple"
+          className="w-full btn-premium flex items-center justify-center gap-2 py-4 text-primary-foreground font-semibold disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none ripple"
         >
-          <Download className="w-5 h-5" />
+          <Download className="w-5 h-5" strokeWidth={2} />
           Convert to Images
         </button>
       </div>
