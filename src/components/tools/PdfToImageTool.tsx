@@ -1,0 +1,72 @@
+import { useState, useCallback } from 'react';
+import { Download } from 'lucide-react';
+import FileDropzone from '../FileDropzone';
+import ProcessingOverlay from '../ProcessingOverlay';
+import { toast } from 'sonner';
+
+interface PdfToImageToolProps {
+  onClose: () => void;
+}
+
+const PdfToImageTool = ({ onClose }: PdfToImageToolProps) => {
+  const [files, setFiles] = useState<File[]>([]);
+  const [isProcessing, setIsProcessing] = useState(false);
+
+  const handleFilesSelected = useCallback((newFiles: File[]) => {
+    setFiles(newFiles);
+  }, []);
+
+  const handleRemoveFile = useCallback((index: number) => {
+    setFiles((prev) => prev.filter((_, i) => i !== index));
+  }, []);
+
+  const handleConvert = async () => {
+    if (files.length === 0) {
+      toast.error('Please select a PDF file');
+      return;
+    }
+
+    setIsProcessing(true);
+    try {
+      // For browser-based PDF to image, we need to inform user about limitations
+      toast.info('PDF to Image requires server processing. Feature coming soon!');
+      onClose();
+    } catch (error) {
+      console.error(error);
+      toast.error('Failed to convert PDF to images');
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
+  return (
+    <>
+      <ProcessingOverlay isProcessing={isProcessing} message="Converting PDF to images..." />
+      
+      <div className="space-y-6">
+        <FileDropzone
+          onFilesSelected={handleFilesSelected}
+          accept=".pdf,application/pdf"
+          multiple={false}
+          files={files}
+          onRemoveFile={handleRemoveFile}
+        />
+
+        <p className="text-sm text-muted-foreground text-center">
+          Select a PDF file to convert to images
+        </p>
+
+        <button
+          onClick={handleConvert}
+          disabled={files.length === 0}
+          className="w-full flex items-center justify-center gap-2 py-3 px-6 rounded-xl bg-primary text-primary-foreground font-medium disabled:opacity-50 disabled:cursor-not-allowed hover:bg-primary/90 transition-colors duration-200 ripple"
+        >
+          <Download className="w-5 h-5" />
+          Convert to Images
+        </button>
+      </div>
+    </>
+  );
+};
+
+export default PdfToImageTool;
