@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import { Upload, X, FileImage, File } from 'lucide-react';
 
 interface FileDropzoneProps {
@@ -18,9 +18,12 @@ const FileDropzone = ({
   onRemoveFile,
   maxFiles = 10,
 }: FileDropzoneProps) => {
+  const [isDragging, setIsDragging] = useState(false);
+
   const handleDrop = useCallback(
     (e: React.DragEvent) => {
       e.preventDefault();
+      setIsDragging(false);
       const droppedFiles = Array.from(e.dataTransfer.files);
       const validFiles = droppedFiles.filter((file) => {
         const fileType = file.type;
@@ -45,6 +48,16 @@ const FileDropzone = ({
     },
     [accept, files, maxFiles, multiple, onFilesSelected]
   );
+
+  const handleDragOver = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(true);
+  }, []);
+
+  const handleDragLeave = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(false);
+  }, []);
 
   const handleChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -74,13 +87,23 @@ const FileDropzone = ({
   };
 
   return (
-    <div className="space-y-4">
-      {/* Drop zone */}
+    <div className="space-y-5">
+      {/* Drop zone with enhanced styling */}
       <label
         onDrop={handleDrop}
-        onDragOver={(e) => e.preventDefault()}
-        className="relative flex flex-col items-center justify-center w-full h-52 border-2 border-dashed border-border/60 hover:border-primary/50 rounded-2xl cursor-pointer transition-all duration-300 group bg-secondary/20 hover:bg-secondary/30"
+        onDragOver={handleDragOver}
+        onDragLeave={handleDragLeave}
+        className={`relative flex flex-col items-center justify-center w-full h-56 border-2 border-dashed rounded-2xl cursor-pointer transition-all duration-400 ease-out group ${
+          isDragging 
+            ? 'border-primary/70 bg-primary/10 scale-[1.02]' 
+            : 'border-border/50 hover:border-primary/50 bg-secondary/20 hover:bg-secondary/30'
+        }`}
       >
+        {/* Glow effect on drag */}
+        {isDragging && (
+          <div className="absolute -inset-2 rounded-3xl bg-gradient-to-br from-primary/30 to-accent/30 blur-xl animate-pulse-glow" />
+        )}
+        
         <input
           type="file"
           accept={accept}
@@ -88,16 +111,22 @@ const FileDropzone = ({
           onChange={handleChange}
           className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
         />
-        <div className="flex flex-col items-center gap-4 pointer-events-none">
+        <div className="relative flex flex-col items-center gap-5 pointer-events-none">
           <div className="relative">
-            <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-primary/30 to-accent/30 blur-xl opacity-0 group-hover:opacity-60 transition-opacity duration-500" />
-            <div className="relative p-5 rounded-2xl bg-gradient-to-br from-primary/15 to-accent/15 border border-primary/20 group-hover:border-primary/40 transition-all duration-300">
-              <Upload className="w-8 h-8 text-primary group-hover:scale-110 transition-transform duration-300" strokeWidth={1.5} />
+            <div className={`absolute -inset-2 rounded-2xl bg-gradient-to-br from-primary/40 to-accent/40 blur-xl transition-opacity duration-500 ${
+              isDragging ? 'opacity-80' : 'opacity-0 group-hover:opacity-60'
+            }`} />
+            <div className={`relative p-5 rounded-2xl bg-gradient-to-br from-primary/15 to-accent/15 border border-primary/25 group-hover:border-primary/50 transition-all duration-400 ${
+              isDragging ? 'scale-110 border-primary/60' : 'group-hover:scale-105'
+            }`}>
+              <Upload className={`w-8 h-8 text-primary transition-transform duration-400 ${
+                isDragging ? 'scale-110' : 'group-hover:scale-110'
+              }`} strokeWidth={1.5} />
             </div>
           </div>
           <div className="text-center">
             <p className="text-foreground font-semibold text-lg">
-              Drop files here or click to upload
+              {isDragging ? 'Drop files here' : 'Drop files here or click to upload'}
             </p>
             <p className="text-sm text-muted-foreground mt-2">
               Supports {accept.split(',').join(', ')}
@@ -106,30 +135,34 @@ const FileDropzone = ({
         </div>
       </label>
 
-      {/* File list */}
+      {/* File list with enhanced styling */}
       {files.length > 0 && (
-        <div className="space-y-2">
+        <div className="space-y-3">
           {files.map((file, index) => (
             <div
               key={`${file.name}-${index}`}
-              className="flex items-center gap-4 p-4 rounded-xl bg-secondary/40 border border-border/30 animate-scale-in"
+              className="flex items-center gap-4 p-4 rounded-xl glass-card border-border/40 animate-scale-in hover:border-primary/30 transition-all duration-300"
+              style={{ animationDelay: `${index * 50}ms` }}
             >
-              <div className="p-2 rounded-lg bg-primary/10 border border-primary/20">
-                {getFileIcon(file)}
+              <div className="relative">
+                <div className="absolute inset-0 rounded-lg bg-primary/30 blur-md opacity-50" />
+                <div className="relative p-2.5 rounded-lg bg-gradient-to-br from-primary/15 to-primary/25 border border-primary/30">
+                  {getFileIcon(file)}
+                </div>
               </div>
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-semibold text-foreground truncate">
                   {file.name}
                 </p>
-                <p className="text-xs text-muted-foreground mt-0.5">
+                <p className="text-xs text-muted-foreground mt-1">
                   {formatFileSize(file.size)}
                 </p>
               </div>
               <button
                 onClick={() => onRemoveFile(index)}
-                className="p-2 rounded-lg hover:bg-destructive/20 border border-transparent hover:border-destructive/30 transition-all duration-200 group"
+                className="p-2.5 rounded-lg hover:bg-destructive/20 border border-transparent hover:border-destructive/40 transition-all duration-300 ease-out group"
               >
-                <X className="w-4 h-4 text-muted-foreground group-hover:text-destructive transition-colors" />
+                <X className="w-4 h-4 text-muted-foreground group-hover:text-destructive group-hover:scale-110 transition-all duration-300" />
               </button>
             </div>
           ))}

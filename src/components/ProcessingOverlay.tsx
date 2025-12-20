@@ -12,37 +12,50 @@ const ProcessingOverlay = ({
   if (!isProcessing) return null;
 
   return (
-    <div className="fixed inset-0 z-[60] flex items-center justify-center bg-background/95 backdrop-blur-md animate-fade-in">
-      {/* Background effects */}
+    <div className="fixed inset-0 z-[60] flex items-center justify-center bg-background/95 backdrop-blur-xl animate-fade-in">
+      {/* Background effects with enhanced depth */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full bg-gradient-to-br from-primary/20 to-accent/20 blur-[100px] animate-pulse-glow" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-gradient-to-br from-primary/25 to-accent/25 blur-[120px] animate-breathe" />
+        <div className="absolute top-1/3 left-1/3 w-[300px] h-[300px] rounded-full bg-primary/15 blur-[80px] animate-float" />
+        <div className="absolute bottom-1/3 right-1/3 w-[250px] h-[250px] rounded-full bg-accent/15 blur-[80px] animate-float" style={{ animationDelay: '-4s' }} />
       </div>
 
-      <div className="relative flex flex-col items-center gap-6">
-        {/* Spinner container */}
+      <div className="relative flex flex-col items-center gap-8">
+        {/* Spinner container with enhanced glow */}
         <div className="relative">
-          <div className="absolute inset-0 rounded-full bg-gradient-to-br from-primary/40 to-accent/40 blur-2xl animate-pulse-glow" />
-          <div className="relative p-8 rounded-full premium-card">
-            <div className="absolute inset-0 rounded-full bg-gradient-to-br from-primary/10 to-accent/10" />
-            <Loader2 className="relative w-12 h-12 text-primary animate-spin" strokeWidth={1.5} />
+          {/* Outer glow ring */}
+          <div className="absolute -inset-6 rounded-full bg-gradient-to-br from-primary/50 to-accent/50 blur-3xl animate-pulse-glow opacity-70" />
+          
+          {/* Middle glow */}
+          <div className="absolute -inset-3 rounded-full bg-gradient-to-br from-primary/40 to-accent/40 blur-xl" />
+          
+          {/* Spinner background */}
+          <div className="relative p-10 rounded-full premium-card">
+            <div className="absolute inset-0 rounded-full bg-gradient-to-br from-primary/15 to-accent/15" />
+            <div className="absolute inset-0 rounded-full border border-primary/20" />
+            
+            {/* Rotating ring */}
+            <div className="absolute inset-0 rounded-full border-2 border-transparent border-t-primary/60 animate-spin" style={{ animationDuration: '1.5s' }} />
+            
+            <Loader2 className="relative w-14 h-14 text-primary animate-spin" strokeWidth={1.5} style={{ animationDuration: '1s' }} />
           </div>
         </div>
 
-        {/* Message */}
-        <div className="text-center">
-          <p className="text-xl font-bold text-foreground">{message}</p>
-          <p className="text-sm text-muted-foreground mt-2">Please wait a moment</p>
+        {/* Message with enhanced typography */}
+        <div className="text-center space-y-2">
+          <p className="text-2xl font-bold text-foreground">{message}</p>
+          <p className="text-sm text-muted-foreground font-medium">Please wait a moment</p>
         </div>
 
-        {/* Loading dots */}
-        <div className="flex items-center gap-2">
-          {[0, 1, 2, 3].map((i) => (
+        {/* Loading dots with enhanced animation */}
+        <div className="flex items-center gap-2.5">
+          {[0, 1, 2, 3, 4].map((i) => (
             <div
               key={i}
-              className="w-2 h-2 rounded-full bg-gradient-to-r from-primary to-accent"
+              className="w-2.5 h-2.5 rounded-full bg-gradient-to-r from-primary to-accent"
               style={{
-                animation: 'pulse 1.2s ease-in-out infinite',
-                animationDelay: `${i * 0.12}s`,
+                animation: 'processingDot 1.4s ease-in-out infinite',
+                animationDelay: `${i * 0.1}s`,
               }}
             />
           ))}
@@ -50,9 +63,15 @@ const ProcessingOverlay = ({
       </div>
 
       <style>{`
-        @keyframes pulse {
-          0%, 100% { opacity: 0.2; transform: scale(0.7); }
-          50% { opacity: 1; transform: scale(1); }
+        @keyframes processingDot {
+          0%, 80%, 100% { 
+            opacity: 0.2; 
+            transform: scale(0.6);
+          }
+          40% { 
+            opacity: 1; 
+            transform: scale(1.15);
+          }
         }
       `}</style>
     </div>
