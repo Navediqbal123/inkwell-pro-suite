@@ -1,5 +1,3 @@
-import { Loader2 } from 'lucide-react';
-
 interface ProcessingOverlayProps {
   isProcessing: boolean;
   message?: string;
@@ -12,68 +10,55 @@ const ProcessingOverlay = ({
   if (!isProcessing) return null;
 
   return (
-    <div className="fixed inset-0 z-[60] flex items-center justify-center bg-background/95 backdrop-blur-xl animate-fade-in">
-      {/* Background effects with enhanced depth */}
+    <div className="fixed inset-0 z-[60] flex items-center justify-center bg-background/98 backdrop-blur-2xl animate-fade-in">
+      {/* Animated background effects */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-gradient-to-br from-primary/25 to-accent/25 blur-[120px] animate-breathe" />
-        <div className="absolute top-1/3 left-1/3 w-[300px] h-[300px] rounded-full bg-primary/15 blur-[80px] animate-float" />
-        <div className="absolute bottom-1/3 right-1/3 w-[250px] h-[250px] rounded-full bg-accent/15 blur-[80px] animate-float" style={{ animationDelay: '-4s' }} />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] rounded-full bg-gradient-to-br from-primary/30 to-accent/30 blur-[150px] animate-breathe" />
+        <div className="absolute top-1/3 left-1/3 w-[350px] h-[350px] rounded-full bg-primary/20 blur-[100px] animate-float" />
+        <div className="absolute bottom-1/3 right-1/3 w-[300px] h-[300px] rounded-full bg-accent/20 blur-[100px] animate-float" style={{ animationDelay: '-5s' }} />
       </div>
 
-      <div className="relative flex flex-col items-center gap-8">
-        {/* Spinner container with enhanced glow */}
+      <div className="relative flex flex-col items-center gap-10">
+        {/* Premium animated loader */}
         <div className="relative">
-          {/* Outer glow ring */}
-          <div className="absolute -inset-6 rounded-full bg-gradient-to-br from-primary/50 to-accent/50 blur-3xl animate-pulse-glow opacity-70" />
+          {/* Outer glow */}
+          <div className="absolute -inset-8 rounded-full bg-gradient-to-br from-primary/50 to-accent/50 blur-[50px] animate-pulse-glow opacity-70" />
           
           {/* Middle glow */}
-          <div className="absolute -inset-3 rounded-full bg-gradient-to-br from-primary/40 to-accent/40 blur-xl" />
+          <div className="absolute -inset-4 rounded-full bg-gradient-to-br from-primary/40 to-accent/40 blur-2xl" />
           
-          {/* Spinner background */}
-          <div className="relative p-10 rounded-full premium-card">
-            <div className="absolute inset-0 rounded-full bg-gradient-to-br from-primary/15 to-accent/15" />
-            <div className="absolute inset-0 rounded-full border border-primary/20" />
+          {/* Spinner container */}
+          <div className="relative p-12 rounded-full floating-card">
+            <div className="absolute inset-0 rounded-full bg-gradient-to-br from-primary/20 to-accent/20" />
             
-            {/* Rotating ring */}
-            <div className="absolute inset-0 rounded-full border-2 border-transparent border-t-primary/60 animate-spin" style={{ animationDuration: '1.5s' }} />
+            {/* Multi-layer spinning rings */}
+            <div className="absolute inset-0 rounded-full border-3 border-transparent border-t-primary/80 border-r-primary/40"
+              style={{ animation: 'loaderSpin 1.5s cubic-bezier(0.5, 0, 0.5, 1) infinite' }} />
+            <div className="absolute inset-3 rounded-full border-2 border-transparent border-t-accent/60 border-l-accent/30"
+              style={{ animation: 'loaderSpin 2s cubic-bezier(0.5, 0, 0.5, 1) infinite reverse' }} />
+            <div className="absolute inset-6 rounded-full border-2 border-transparent border-b-primary/50"
+              style={{ animation: 'loaderSpin 1.2s linear infinite' }} />
             
-            <Loader2 className="relative w-14 h-14 text-primary animate-spin" strokeWidth={1.5} style={{ animationDuration: '1s' }} />
+            {/* Center pulsing dot */}
+            <div className="relative w-16 h-16 flex items-center justify-center">
+              <div className="w-6 h-6 rounded-full bg-gradient-to-br from-primary to-accent" 
+                style={{ animation: 'loaderPulse 1s ease-in-out infinite' }} />
+            </div>
           </div>
         </div>
 
-        {/* Message with enhanced typography */}
-        <div className="text-center space-y-2">
-          <p className="text-2xl font-bold text-foreground">{message}</p>
-          <p className="text-sm text-muted-foreground font-medium">Please wait a moment</p>
+        {/* Message with premium typography */}
+        <div className="text-center space-y-3">
+          <p className="text-3xl font-bold gradient-text glow-text">{message}</p>
+          <p className="text-base text-muted-foreground font-medium">Please wait a moment</p>
         </div>
 
-        {/* Loading dots with enhanced animation */}
-        <div className="flex items-center gap-2.5">
-          {[0, 1, 2, 3, 4].map((i) => (
-            <div
-              key={i}
-              className="w-2.5 h-2.5 rounded-full bg-gradient-to-r from-primary to-accent"
-              style={{
-                animation: 'processingDot 1.4s ease-in-out infinite',
-                animationDelay: `${i * 0.1}s`,
-              }}
-            />
-          ))}
+        {/* Animated loading bar */}
+        <div className="w-48 h-1.5 rounded-full bg-secondary/50 overflow-hidden">
+          <div className="h-full w-full bg-gradient-to-r from-primary via-accent to-primary rounded-full animate-shimmer"
+            style={{ backgroundSize: '200% 100%' }} />
         </div>
       </div>
-
-      <style>{`
-        @keyframes processingDot {
-          0%, 80%, 100% { 
-            opacity: 0.2; 
-            transform: scale(0.6);
-          }
-          40% { 
-            opacity: 1; 
-            transform: scale(1.15);
-          }
-        }
-      `}</style>
     </div>
   );
 };
