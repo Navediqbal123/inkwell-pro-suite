@@ -26,7 +26,7 @@ const ToolModal = ({ isOpen, onClose, title, children }: ToolModalProps) => {
       const timer = setTimeout(() => {
         setShouldRender(false);
         document.body.style.overflow = 'unset';
-      }, 500);
+      }, 600);
       return () => clearTimeout(timer);
     }
     return () => {
@@ -40,42 +40,43 @@ const ToolModal = ({ isOpen, onClose, title, children }: ToolModalProps) => {
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       {/* Backdrop with premium blur */}
       <div
-        className={`absolute inset-0 bg-background/95 backdrop-blur-2xl transition-all duration-500 ease-out ${
+        className={`absolute inset-0 bg-background/96 backdrop-blur-3xl transition-all duration-700 ease-out ${
           isAnimating ? 'opacity-100' : 'opacity-0'
         }`}
         onClick={onClose}
       />
       
       {/* Ambient background glows */}
-      <div className={`absolute inset-0 overflow-hidden pointer-events-none transition-opacity duration-700 ${isAnimating ? 'opacity-100' : 'opacity-0'}`}>
-        <div className="absolute top-1/4 left-1/4 w-[400px] h-[400px] rounded-full bg-primary/10 blur-[120px] animate-float" />
-        <div className="absolute bottom-1/4 right-1/4 w-[350px] h-[350px] rounded-full bg-accent/10 blur-[100px] animate-float" style={{ animationDelay: '-4s' }} />
+      <div className={`absolute inset-0 overflow-hidden pointer-events-none transition-opacity duration-800 ${isAnimating ? 'opacity-100' : 'opacity-0'}`}>
+        <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] rounded-full bg-primary/12 blur-[150px] animate-float" />
+        <div className="absolute bottom-1/4 right-1/4 w-[450px] h-[450px] rounded-full bg-accent/12 blur-[130px] animate-float" style={{ animationDelay: '-5s' }} />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-[hsl(var(--glow-cyan))]/8 blur-[180px] animate-breathe" />
       </div>
 
-      {/* Modal with premium animation */}
+      {/* Modal with WOW animation */}
       <div 
-        className={`relative w-full max-w-2xl max-h-[90vh] overflow-hidden rounded-3xl floating-card transition-all duration-600 ease-out ${
+        className={`relative w-full max-w-2xl max-h-[90vh] overflow-hidden rounded-[2rem] floating-card transition-all duration-700 ease-out ${
           isAnimating 
             ? 'opacity-100 scale-100 translate-y-0' 
-            : 'opacity-0 scale-95 translate-y-12'
+            : 'opacity-0 scale-90 translate-y-16'
         }`}
         style={{
           boxShadow: isAnimating 
-            ? '0 40px 100px rgba(0, 0, 0, 0.6), 0 0 120px hsl(var(--primary) / 0.15)'
-            : '0 20px 40px rgba(0, 0, 0, 0.4)',
-          filter: isAnimating ? 'blur(0px)' : 'blur(8px)',
-          transition: 'all 0.6s cubic-bezier(0.16, 1, 0.3, 1)'
+            ? '0 50px 120px rgba(0, 0, 0, 0.7), 0 0 150px hsl(var(--primary) / 0.18), 0 0 80px hsl(var(--accent) / 0.12)'
+            : '0 25px 50px rgba(0, 0, 0, 0.5)',
+          filter: isAnimating ? 'blur(0px)' : 'blur(10px)',
+          transition: 'all 0.7s cubic-bezier(0.16, 1, 0.3, 1)'
         }}
       >
         {/* Header with glassmorphism */}
-        <div className="sticky top-0 z-10 flex items-center justify-between p-5 border-b border-border/30 bg-card/90 backdrop-blur-xl">
+        <div className="sticky top-0 z-10 flex items-center justify-between p-6 border-b border-border/40 bg-card/95 backdrop-blur-2xl">
           {/* Back button with premium hover */}
           <button
             onClick={onClose}
-            className="flex items-center gap-3 px-5 py-3 rounded-xl hover:bg-secondary/80 border border-transparent hover:border-primary/30 transition-all duration-400 ease-out group ripple"
+            className="flex items-center gap-3 px-6 py-3.5 rounded-xl hover:bg-secondary/90 border border-transparent hover:border-primary/40 transition-all duration-500 ease-out group ripple"
           >
-            <ArrowLeft className="w-5 h-5 text-muted-foreground group-hover:text-primary group-hover:-translate-x-1 transition-all duration-400" />
-            <span className="text-sm font-bold text-muted-foreground group-hover:text-foreground transition-colors duration-400">
+            <ArrowLeft className="w-5 h-5 text-muted-foreground group-hover:text-primary group-hover:-translate-x-1.5 transition-all duration-500" />
+            <span className="text-sm font-bold text-muted-foreground group-hover:text-foreground transition-colors duration-500">
               Back
             </span>
           </button>
@@ -88,15 +89,15 @@ const ToolModal = ({ isOpen, onClose, title, children }: ToolModalProps) => {
           {/* Close button with premium styling */}
           <button
             onClick={onClose}
-            className="p-3 rounded-xl hover:bg-secondary/80 border border-transparent hover:border-primary/30 transition-all duration-400 ease-out ripple group"
+            className="p-3.5 rounded-xl hover:bg-secondary/90 border border-transparent hover:border-primary/40 transition-all duration-500 ease-out ripple group"
           >
-            <X className="w-5 h-5 text-muted-foreground group-hover:text-foreground group-hover:rotate-90 transition-all duration-400" />
+            <X className="w-5 h-5 text-muted-foreground group-hover:text-foreground group-hover:rotate-90 transition-all duration-500" />
           </button>
         </div>
 
         {/* Content with subtle gradient */}
-        <div className="relative p-6 overflow-auto max-h-[calc(90vh-80px)]">
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-primary/3 pointer-events-none" />
+        <div className="relative p-7 overflow-auto max-h-[calc(90vh-88px)]">
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-primary/4 pointer-events-none" />
           <div className="relative">
             {children}
           </div>
