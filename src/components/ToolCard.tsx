@@ -12,62 +12,61 @@ const ToolCard = ({ icon: Icon, title, description, onClick, delay = 0 }: ToolCa
   return (
     <button
       onClick={onClick}
-      className="group relative w-full text-left animate-slide-up perspective-1000"
+      className="group relative w-full text-left animate-slide-up perspective-1500"
       style={{ animationDelay: `${delay}ms`, animationFillMode: 'backwards' }}
     >
-      {/* Outer neon glow */}
-      <div className="absolute -inset-3 rounded-[28px] bg-gradient-to-r from-primary/60 via-accent/50 to-primary/60 opacity-0 group-hover:opacity-100 blur-3xl transition-all duration-700 ease-out" />
+      {/* Multi-layer ambient glow */}
+      <div className="absolute -inset-6 rounded-[3rem] bg-gradient-to-r from-primary/50 via-accent/40 to-primary/50 opacity-0 group-hover:opacity-100 blur-[50px] transition-all duration-1000 ease-out" />
+      <div className="absolute -inset-4 rounded-[2.5rem] bg-gradient-to-br from-primary/40 via-glow-cyan/30 to-accent/40 opacity-0 group-hover:opacity-90 blur-[30px] transition-all duration-700" />
       
-      {/* Secondary ambient glow */}
-      <div className="absolute -inset-2 rounded-3xl bg-gradient-to-br from-primary/40 to-accent/40 opacity-0 group-hover:opacity-80 blur-2xl transition-all duration-500" />
-      
-      {/* Card with animated border */}
-      <div className="relative floating-card p-8 rounded-3xl cursor-pointer overflow-hidden transition-all duration-600 ease-out group-hover:translate-y-[-12px] group-hover:scale-[1.02]"
+      {/* Card with WOW hover effect */}
+      <div className="relative wow-card p-10 rounded-[2rem] cursor-pointer overflow-hidden"
         style={{ 
           transformStyle: 'preserve-3d',
-          transition: 'all 0.6s cubic-bezier(0.16, 1, 0.3, 1)'
         }}
       >
-        {/* Animated gradient overlay on hover */}
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-accent/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+        {/* Animated internal gradient on hover */}
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/15 via-glow-cyan/8 to-accent/15 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
         
-        {/* Animated shine effect */}
+        {/* Premium wave shine effect */}
         <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 overflow-hidden">
-          <div className="absolute -inset-full top-0 h-[200%] w-[200%] bg-gradient-to-r from-transparent via-white/5 to-transparent -rotate-45 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000 ease-out" />
+          <div className="absolute -inset-full top-0 h-[300%] w-[300%] bg-gradient-to-r from-transparent via-white/8 to-transparent -rotate-45 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-[1.5s] ease-out" />
         </div>
         
-        {/* Top border glow line */}
-        <div className="absolute top-0 left-0 right-0 h-px">
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-primary/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-primary/50 to-transparent blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+        {/* Top edge neon glow */}
+        <div className="absolute top-0 left-0 right-0 h-[2px]">
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-primary/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-primary/60 to-transparent blur-md opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-glow-cyan/50 to-transparent blur-lg opacity-0 group-hover:opacity-100 transition-opacity duration-700 delay-100" />
         </div>
         
         {/* Content */}
-        <div className="relative flex items-start gap-7">
-          {/* Icon container with enhanced glow */}
+        <div className="relative flex items-start gap-8">
+          {/* Icon container with cyber glow */}
           <div className="relative shrink-0">
-            <div className="absolute -inset-3 rounded-2xl bg-gradient-to-br from-primary/60 to-accent/60 blur-2xl opacity-0 group-hover:opacity-80 transition-all duration-500" />
-            <div className="relative p-5 rounded-2xl bg-gradient-to-br from-primary/20 via-primary/15 to-accent/20 border border-primary/30 group-hover:border-primary/60 group-hover:bg-primary/25 transition-all duration-500 ease-out">
-              <Icon className="w-8 h-8 text-primary group-hover:scale-110 group-hover:text-primary transition-all duration-500 ease-out" strokeWidth={1.5} />
+            <div className="absolute -inset-4 rounded-2xl bg-gradient-to-br from-primary/70 via-glow-cyan/50 to-accent/70 blur-[30px] opacity-0 group-hover:opacity-100 transition-all duration-700 animate-cyber-pulse" style={{ animationPlayState: 'paused' }} />
+            <div className="group-hover:[&>div]:animate-cyber-pulse" />
+            <div className="relative p-6 rounded-2xl bg-gradient-to-br from-primary/25 via-primary/18 to-accent/25 border border-primary/40 group-hover:border-primary/70 group-hover:bg-primary/30 transition-all duration-600 ease-out group-hover:scale-110">
+              <Icon className="w-9 h-9 text-primary group-hover:text-foreground transition-all duration-500 ease-out group-hover:drop-shadow-[0_0_20px_hsl(var(--primary)/0.8)]" strokeWidth={1.5} />
             </div>
           </div>
           
           {/* Text content */}
           <div className="flex-1 min-w-0 pt-2">
-            <h3 className="text-xl font-bold text-foreground group-hover:text-primary transition-colors duration-400 ease-out">
+            <h3 className="text-2xl font-bold text-foreground group-hover:gradient-text-cyber transition-all duration-500 ease-out">
               {title}
             </h3>
-            <p className="mt-3 text-base text-muted-foreground leading-relaxed line-clamp-2 group-hover:text-muted-foreground/90 transition-colors duration-400">
+            <p className="mt-3 text-base text-muted-foreground leading-relaxed line-clamp-2 group-hover:text-foreground/80 transition-colors duration-500">
               {description}
             </p>
           </div>
           
           {/* Arrow indicator with premium animation */}
-          <div className="self-center opacity-0 group-hover:opacity-100 -translate-x-6 group-hover:translate-x-0 transition-all duration-500 ease-out">
-            <div className="relative p-3 rounded-xl bg-gradient-to-br from-primary/20 to-primary/30 border border-primary/40 group-hover:border-primary/70 backdrop-blur-sm transition-all duration-400">
-              <div className="absolute -inset-1 rounded-xl bg-primary/30 blur-md opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+          <div className="self-center opacity-0 group-hover:opacity-100 -translate-x-8 group-hover:translate-x-0 transition-all duration-700 ease-out">
+            <div className="relative p-4 rounded-xl bg-gradient-to-br from-primary/25 to-primary/35 border border-primary/50 group-hover:border-primary/80 backdrop-blur-sm transition-all duration-500">
+              <div className="absolute -inset-2 rounded-xl bg-primary/40 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               <svg
-                className="relative w-5 h-5 text-primary group-hover:translate-x-1 transition-transform duration-300"
+                className="relative w-6 h-6 text-primary group-hover:text-foreground group-hover:translate-x-1.5 transition-all duration-400"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -82,6 +81,9 @@ const ToolCard = ({ icon: Icon, title, description, onClick, delay = 0 }: ToolCa
             </div>
           </div>
         </div>
+        
+        {/* Bottom gradient accent */}
+        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-primary/6 via-accent/4 to-transparent pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
       </div>
     </button>
   );
