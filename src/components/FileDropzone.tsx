@@ -87,23 +87,18 @@ const FileDropzone = ({
   };
 
   return (
-    <div className="space-y-5">
-      {/* Drop zone with enhanced styling */}
+    <div className="space-y-4">
+      {/* Drop zone */}
       <label
         onDrop={handleDrop}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
-        className={`relative flex flex-col items-center justify-center w-full h-56 border-2 border-dashed rounded-2xl cursor-pointer transition-all duration-400 ease-out group ${
+        className={`relative flex flex-col items-center justify-center w-full h-48 border-2 border-dashed rounded-xl cursor-pointer transition-all duration-300 ${
           isDragging 
-            ? 'border-primary/70 bg-primary/10 scale-[1.02]' 
-            : 'border-border/50 hover:border-primary/50 bg-secondary/20 hover:bg-secondary/30'
+            ? 'border-primary/60 bg-primary/5 scale-[1.01]' 
+            : 'border-border/50 hover:border-primary/40 bg-secondary/30 hover:bg-secondary/50'
         }`}
       >
-        {/* Glow effect on drag */}
-        {isDragging && (
-          <div className="absolute -inset-2 rounded-3xl bg-gradient-to-br from-primary/30 to-accent/30 blur-xl animate-pulse-glow" />
-        )}
-        
         <input
           type="file"
           accept={accept}
@@ -111,58 +106,48 @@ const FileDropzone = ({
           onChange={handleChange}
           className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
         />
-        <div className="relative flex flex-col items-center gap-5 pointer-events-none">
-          <div className="relative">
-            <div className={`absolute -inset-2 rounded-2xl bg-gradient-to-br from-primary/40 to-accent/40 blur-xl transition-opacity duration-500 ${
-              isDragging ? 'opacity-80' : 'opacity-0 group-hover:opacity-60'
-            }`} />
-            <div className={`relative p-5 rounded-2xl bg-gradient-to-br from-primary/15 to-accent/15 border border-primary/25 group-hover:border-primary/50 transition-all duration-400 ${
-              isDragging ? 'scale-110 border-primary/60' : 'group-hover:scale-105'
-            }`}>
-              <Upload className={`w-8 h-8 text-primary transition-transform duration-400 ${
-                isDragging ? 'scale-110' : 'group-hover:scale-110'
-              }`} strokeWidth={1.5} />
-            </div>
+        <div className="flex flex-col items-center gap-4 pointer-events-none">
+          <div className={`p-4 rounded-xl bg-primary/10 border border-primary/20 transition-all duration-300 ${
+            isDragging ? 'scale-110 bg-primary/15' : ''
+          }`}>
+            <Upload className="w-6 h-6 text-primary" strokeWidth={1.5} />
           </div>
           <div className="text-center">
-            <p className="text-foreground font-semibold text-lg">
+            <p className="text-foreground font-semibold">
               {isDragging ? 'Drop files here' : 'Drop files here or click to upload'}
             </p>
-            <p className="text-sm text-muted-foreground mt-2">
+            <p className="text-sm text-muted-foreground mt-1">
               Supports {accept.split(',').join(', ')}
             </p>
           </div>
         </div>
       </label>
 
-      {/* File list with enhanced styling */}
+      {/* File list */}
       {files.length > 0 && (
-        <div className="space-y-3">
+        <div className="space-y-2">
           {files.map((file, index) => (
             <div
               key={`${file.name}-${index}`}
-              className="flex items-center gap-4 p-4 rounded-xl glass-card border-border/40 animate-scale-in hover:border-primary/30 transition-all duration-300"
-              style={{ animationDelay: `${index * 50}ms` }}
+              className="flex items-center gap-3 p-3 rounded-xl bg-card/60 border border-border/40 animate-scale-in hover:border-primary/20 transition-all duration-300"
+              style={{ animationDelay: `${index * 40}ms` }}
             >
-              <div className="relative">
-                <div className="absolute inset-0 rounded-lg bg-primary/30 blur-md opacity-50" />
-                <div className="relative p-2.5 rounded-lg bg-gradient-to-br from-primary/15 to-primary/25 border border-primary/30">
-                  {getFileIcon(file)}
-                </div>
+              <div className="p-2 rounded-lg bg-primary/10 border border-primary/20">
+                {getFileIcon(file)}
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-semibold text-foreground truncate">
+                <p className="text-sm font-medium text-foreground truncate">
                   {file.name}
                 </p>
-                <p className="text-xs text-muted-foreground mt-1">
+                <p className="text-xs text-muted-foreground">
                   {formatFileSize(file.size)}
                 </p>
               </div>
               <button
                 onClick={() => onRemoveFile(index)}
-                className="p-2.5 rounded-lg hover:bg-destructive/20 border border-transparent hover:border-destructive/40 transition-all duration-300 ease-out group"
+                className="p-2 rounded-lg hover:bg-destructive/10 border border-transparent hover:border-destructive/20 transition-all duration-300 group"
               >
-                <X className="w-4 h-4 text-muted-foreground group-hover:text-destructive group-hover:scale-110 transition-all duration-300" />
+                <X className="w-4 h-4 text-muted-foreground group-hover:text-destructive transition-colors" />
               </button>
             </div>
           ))}
