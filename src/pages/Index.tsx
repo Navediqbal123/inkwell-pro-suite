@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { ImageIcon, FileImage, Layers, Minimize2, Shield } from 'lucide-react';
+import { ImageIcon, FileImage, Layers, Minimize2, Shield, Sparkles, FileText, Highlighter, Search, Tag, Cpu } from 'lucide-react';
 import SplashScreen from '@/components/SplashScreen';
 import Header from '@/components/Header';
 import ToolCard from '@/components/ToolCard';
@@ -9,9 +9,14 @@ import ImageToPdfTool from '@/components/tools/ImageToPdfTool';
 import PdfToImageTool from '@/components/tools/PdfToImageTool';
 import MergePdfTool from '@/components/tools/MergePdfTool';
 import CompressPdfTool from '@/components/tools/CompressPdfTool';
+import SmartSummaryTool from '@/components/tools/SmartSummaryTool';
+import TextExtractTool from '@/components/tools/TextExtractTool';
+import KeyPointsTool from '@/components/tools/KeyPointsTool';
+import SmartSearchTool from '@/components/tools/SmartSearchTool';
+import FileNameSuggestTool from '@/components/tools/FileNameSuggestTool';
 import { useHistory } from '@/hooks/useHistory';
 
-type ToolType = 'image-to-pdf' | 'pdf-to-image' | 'merge-pdf' | 'compress-pdf' | null;
+type ToolType = 'image-to-pdf' | 'pdf-to-image' | 'merge-pdf' | 'compress-pdf' | 'smart-summary' | 'text-extract' | 'key-points' | 'smart-search' | 'file-name-suggest' | null;
 
 const tools = [
   {
@@ -37,6 +42,39 @@ const tools = [
     icon: Minimize2,
     title: 'Compress PDF',
     description: 'Reduce PDF file size while maintaining quality',
+  },
+];
+
+const smartTools = [
+  {
+    id: 'smart-summary' as const,
+    icon: Sparkles,
+    title: 'Smart Summary',
+    description: 'Auto-generate key points and document insights',
+  },
+  {
+    id: 'text-extract' as const,
+    icon: FileText,
+    title: 'Text Extract',
+    description: 'Extract and clean text with smart formatting',
+  },
+  {
+    id: 'key-points' as const,
+    icon: Highlighter,
+    title: 'Key Points',
+    description: 'Highlight the most important sentences',
+  },
+  {
+    id: 'smart-search' as const,
+    icon: Search,
+    title: 'Smart Search',
+    description: 'Find content by asking your document',
+  },
+  {
+    id: 'file-name-suggest' as const,
+    icon: Tag,
+    title: 'Name Suggest',
+    description: 'Get professional file name suggestions',
   },
 ];
 
@@ -72,13 +110,23 @@ const Index = () => {
         return <MergePdfTool onClose={handleCloseModal} />;
       case 'compress-pdf':
         return <CompressPdfTool onClose={handleCloseModal} />;
+      case 'smart-summary':
+        return <SmartSummaryTool onClose={handleCloseModal} />;
+      case 'text-extract':
+        return <TextExtractTool onClose={handleCloseModal} />;
+      case 'key-points':
+        return <KeyPointsTool onClose={handleCloseModal} />;
+      case 'smart-search':
+        return <SmartSearchTool onClose={handleCloseModal} />;
+      case 'file-name-suggest':
+        return <FileNameSuggestTool onClose={handleCloseModal} />;
       default:
         return null;
     }
   };
 
   const getToolTitle = () => {
-    const tool = tools.find((t) => t.id === activeTool);
+    const tool = tools.find((t) => t.id === activeTool) || smartTools.find((t) => t.id === activeTool);
     return tool?.title || '';
   };
 
@@ -135,8 +183,53 @@ const Index = () => {
               ))}
             </div>
 
+            {/* Smart Tools Section */}
+            <div className="mt-20 animate-fade-in" style={{ animationDelay: '0.5s', animationFillMode: 'backwards' }}>
+              {/* Section Header */}
+              <div className="text-center mb-10">
+                <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-accent/15 border border-accent/30 mb-6">
+                  <Cpu className="w-4 h-4 text-accent" />
+                  <span className="text-sm font-semibold text-accent uppercase tracking-wider">
+                    Smart Features
+                  </span>
+                </div>
+                <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-3">
+                  AI-Powered Analysis
+                </h2>
+                <p className="text-muted-foreground max-w-md mx-auto">
+                  Intelligent document processing powered by local algorithms — fast, private, and free
+                </p>
+              </div>
+
+              {/* Smart Tools Grid */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                {smartTools.map((tool, index) => (
+                  <button
+                    key={tool.id}
+                    onClick={() => handleToolClick(tool.id)}
+                    className="group p-5 rounded-2xl bg-card/80 border border-border/50 hover:border-accent/40 transition-all duration-300 text-left animate-fade-in-scale hover:translate-y-[-2px] hover:shadow-lg hover:shadow-accent/5"
+                    style={{ animationDelay: `${0.6 + index * 0.08}s`, animationFillMode: 'backwards' }}
+                  >
+                    <div className="flex items-start gap-4">
+                      <div className="p-2.5 rounded-xl bg-accent/15 border border-accent/25 group-hover:bg-accent/25 group-hover:border-accent/40 transition-all duration-300">
+                        <tool.icon className="w-5 h-5 text-accent" strokeWidth={1.5} />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <h3 className="font-semibold text-foreground mb-1 group-hover:text-accent transition-colors">
+                          {tool.title}
+                        </h3>
+                        <p className="text-xs text-muted-foreground leading-relaxed">
+                          {tool.description}
+                        </p>
+                      </div>
+                    </div>
+                  </button>
+                ))}
+              </div>
+            </div>
+
             {/* Security Note */}
-            <div className="mt-16 text-center animate-fade-in" style={{ animationDelay: '0.7s', animationFillMode: 'backwards' }}>
+            <div className="mt-16 text-center animate-fade-in" style={{ animationDelay: '0.8s', animationFillMode: 'backwards' }}>
               <div className="inline-flex items-center gap-4 px-6 py-4 rounded-xl bg-card/60 border border-border/50">
                 <div className="p-2.5 rounded-lg bg-green-500/15 border border-green-500/30">
                   <Shield className="w-5 h-5 text-green-500" strokeWidth={1.5} />
