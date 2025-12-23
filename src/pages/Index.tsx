@@ -194,10 +194,10 @@ const Index = () => {
                   </span>
                 </div>
                 <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-3">
-                  AI-Powered Analysis
+                  Smart Document Tools
                 </h2>
                 <p className="text-muted-foreground max-w-md mx-auto">
-                  Intelligent document processing powered by local algorithms — fast, private, and free
+                  Smart local processing — fast, private, and secure
                 </p>
               </div>
 
