@@ -134,11 +134,11 @@ const Index = () => {
     <>
       {showSplash && <SplashScreen onComplete={handleSplashComplete} />}
 
-      <div className={`min-h-screen bg-background transition-all duration-500 ease-out ${showSplash ? 'opacity-0 scale-[0.98]' : 'opacity-100 scale-100'}`}>
-        {/* Subtle background gradient */}
+      <div className={`min-h-screen bg-background transition-all duration-700 ease-out ${showSplash ? 'opacity-0 scale-[0.98]' : 'opacity-100 scale-100'}`}>
+        {/* Subtle animated background gradient */}
         <div className="fixed inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute top-[-20%] left-[10%] w-[800px] h-[800px] rounded-full bg-primary/8 blur-[180px]" />
-          <div className="absolute bottom-[-20%] right-[5%] w-[700px] h-[700px] rounded-full bg-accent/8 blur-[160px]" />
+          <div className="absolute top-[-20%] left-[10%] w-[800px] h-[800px] rounded-full bg-primary/8 blur-[180px] animate-breathe" />
+          <div className="absolute bottom-[-20%] right-[5%] w-[700px] h-[700px] rounded-full bg-accent/8 blur-[160px] animate-breathe" style={{ animationDelay: '2s' }} />
         </div>
 
         <Header />
@@ -147,9 +147,9 @@ const Index = () => {
           <div className="container mx-auto max-w-4xl">
             {/* Hero Section */}
             <div className="text-center mb-20 space-y-8">
-              <div className="animate-fade-in-scale" style={{ animationDelay: '0.1s', animationFillMode: 'backwards' }}>
+              <div className="animate-fade-in-scale" style={{ animationDelay: '0.15s', animationFillMode: 'backwards' }}>
                 {/* Badge */}
-                <div className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-secondary border border-border mb-8">
+                <div className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-secondary border border-border mb-8 hover-lift">
                   <div className="w-2 h-2 rounded-full bg-primary animate-gentle-pulse" />
                   <span className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">
                     Professional Suite
@@ -160,11 +160,11 @@ const Index = () => {
                 <h1 className="text-5xl md:text-6xl lg:text-7xl font-extrabold leading-tight tracking-tight">
                   <span className="gradient-text-hero">Powerful PDF Tools</span>
                   <br />
-                  <span className="text-foreground/90 text-3xl md:text-4xl font-bold mt-4 block">At Your Fingertips</span>
+                  <span className="text-foreground/90 text-3xl md:text-4xl font-bold mt-4 block animate-fade-in" style={{ animationDelay: '0.35s', animationFillMode: 'backwards' }}>At Your Fingertips</span>
                 </h1>
               </div>
               
-              <p className="text-lg md:text-xl text-muted-foreground max-w-xl mx-auto leading-relaxed animate-fade-in" style={{ animationDelay: '0.2s', animationFillMode: 'backwards' }}>
+              <p className="text-lg md:text-xl text-muted-foreground max-w-xl mx-auto leading-relaxed animate-fade-in" style={{ animationDelay: '0.45s', animationFillMode: 'backwards' }}>
                 Fast, secure, and professional PDF utilities — all processing happens in your browser
               </p>
             </div>
@@ -178,17 +178,17 @@ const Index = () => {
                   title={tool.title}
                   description={tool.description}
                   onClick={() => handleToolClick(tool.id)}
-                  delay={300 + index * 100}
+                  delay={550 + index * 120}
                 />
               ))}
             </div>
 
             {/* Smart Tools Section */}
-            <div className="mt-20 animate-fade-in" style={{ animationDelay: '0.5s', animationFillMode: 'backwards' }}>
+            <div className="mt-20 animate-fade-in" style={{ animationDelay: '1s', animationFillMode: 'backwards' }}>
               {/* Section Header */}
-              <div className="text-center mb-10">
-                <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-accent/15 border border-accent/30 mb-6">
-                  <Cpu className="w-4 h-4 text-accent" />
+              <div className="text-center mb-10 animate-fade-in-scale" style={{ animationDelay: '1.1s', animationFillMode: 'backwards' }}>
+                <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-accent/15 border border-accent/30 mb-6 hover-lift">
+                  <Cpu className="w-4 h-4 text-accent animate-soft-float" />
                   <span className="text-sm font-semibold text-accent uppercase tracking-wider">
                     Smart Features
                   </span>
@@ -207,18 +207,18 @@ const Index = () => {
                   <button
                     key={tool.id}
                     onClick={() => handleToolClick(tool.id)}
-                    className="group p-5 rounded-2xl bg-card/80 border border-border/50 hover:border-accent/40 transition-all duration-300 text-left animate-fade-in-scale hover:translate-y-[-2px] hover:shadow-lg hover:shadow-accent/5"
-                    style={{ animationDelay: `${0.6 + index * 0.08}s`, animationFillMode: 'backwards' }}
+                    className="group p-5 rounded-2xl bg-card/80 border border-border/50 hover:border-accent/40 transition-all duration-500 ease-out text-left animate-fade-in-scale hover:-translate-y-2 hover:shadow-[0_20px_50px_rgba(0,0,0,0.4),0_0_40px_hsl(var(--accent)/0.06)] press-effect"
+                    style={{ animationDelay: `${1.2 + index * 0.1}s`, animationFillMode: 'backwards' }}
                   >
                     <div className="flex items-start gap-4">
-                      <div className="p-2.5 rounded-xl bg-accent/15 border border-accent/25 group-hover:bg-accent/25 group-hover:border-accent/40 transition-all duration-300">
-                        <tool.icon className="w-5 h-5 text-accent" strokeWidth={1.5} />
+                      <div className="p-2.5 rounded-xl bg-accent/15 border border-accent/25 group-hover:bg-accent/25 group-hover:border-accent/40 transition-all duration-500 ease-out">
+                        <tool.icon className="w-5 h-5 text-accent group-hover:scale-110 transition-transform duration-500 ease-out group-hover:drop-shadow-[0_0_10px_hsl(var(--accent)/0.4)]" strokeWidth={1.5} />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <h3 className="font-semibold text-foreground mb-1 group-hover:text-accent transition-colors">
+                        <h3 className="font-semibold text-foreground mb-1 group-hover:text-accent transition-colors duration-500 ease-out">
                           {tool.title}
                         </h3>
-                        <p className="text-xs text-muted-foreground leading-relaxed">
+                        <p className="text-xs text-muted-foreground leading-relaxed group-hover:text-foreground/60 transition-colors duration-500 ease-out">
                           {tool.description}
                         </p>
                       </div>
@@ -229,10 +229,10 @@ const Index = () => {
             </div>
 
             {/* Security Note */}
-            <div className="mt-16 text-center animate-fade-in" style={{ animationDelay: '0.8s', animationFillMode: 'backwards' }}>
-              <div className="inline-flex items-center gap-4 px-6 py-4 rounded-xl bg-card/60 border border-border/50">
+            <div className="mt-16 text-center animate-fade-in" style={{ animationDelay: '1.7s', animationFillMode: 'backwards' }}>
+              <div className="inline-flex items-center gap-4 px-6 py-4 rounded-xl bg-card/60 border border-border/50 hover-lift animate-glow-pulse">
                 <div className="p-2.5 rounded-lg bg-green-500/15 border border-green-500/30">
-                  <Shield className="w-5 h-5 text-green-500" strokeWidth={1.5} />
+                  <Shield className="w-5 h-5 text-green-500 animate-soft-float" strokeWidth={1.5} />
                 </div>
                 <div className="text-left">
                   <p className="font-semibold text-foreground text-sm">100% Secure & Private</p>
