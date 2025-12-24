@@ -3,6 +3,7 @@ import { Download } from 'lucide-react';
 import FileDropzone from '../FileDropzone';
 import ProcessingOverlay from '../ProcessingOverlay';
 import { toast } from 'sonner';
+import { useUsageTracking } from '@/hooks/useUsageTracking';
 
 interface PdfToImageToolProps {
   onClose: () => void;
@@ -11,6 +12,7 @@ interface PdfToImageToolProps {
 const PdfToImageTool = ({ onClose }: PdfToImageToolProps) => {
   const [files, setFiles] = useState<File[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
+  const { trackUsage } = useUsageTracking();
 
   const handleFilesSelected = useCallback((newFiles: File[]) => {
     setFiles(newFiles);
@@ -28,6 +30,11 @@ const PdfToImageTool = ({ onClose }: PdfToImageToolProps) => {
 
     setIsProcessing(true);
     try {
+      // Track usage
+      if (files[0]) {
+        trackUsage('PDF to Image', files[0].name);
+      }
+      
       // For browser-based PDF to image, we need to inform user about limitations
       toast.info('PDF to Image requires server processing. Feature coming soon!');
       onClose();

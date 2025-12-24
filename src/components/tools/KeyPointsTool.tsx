@@ -4,6 +4,7 @@ import FileDropzone from '../FileDropzone';
 import ProcessingOverlay from '../ProcessingOverlay';
 import { toast } from 'sonner';
 import { extractPdfText, extractKeyPoints } from '@/lib/pdfTextExtractor';
+import { useUsageTracking } from '@/hooks/useUsageTracking';
 
 interface KeyPointsToolProps {
   onClose: () => void;
@@ -14,7 +15,7 @@ const KeyPointsTool = ({ onClose }: KeyPointsToolProps) => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [keyPoints, setKeyPoints] = useState<string[] | null>(null);
   const [copied, setCopied] = useState(false);
-
+  const { trackUsage } = useUsageTracking();
   const handleFilesSelected = useCallback((newFiles: File[]) => {
     setFiles(newFiles);
     setKeyPoints(null);
@@ -38,10 +39,8 @@ const KeyPointsTool = ({ onClose }: KeyPointsToolProps) => {
       
       setKeyPoints(points);
       
-      // Add to history
-      if (typeof window !== 'undefined' && (window as any).addPdfToolsHistory) {
-        (window as any).addPdfToolsHistory('Key Points', files[0].name);
-      }
+      // Track usage
+      trackUsage('Key Points', files[0].name);
       
       toast.success('Key points extracted!');
     } catch (error) {

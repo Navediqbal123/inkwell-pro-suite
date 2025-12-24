@@ -4,6 +4,7 @@ import { Download } from 'lucide-react';
 import FileDropzone from '../FileDropzone';
 import ProcessingOverlay from '../ProcessingOverlay';
 import { toast } from 'sonner';
+import { useUsageTracking } from '@/hooks/useUsageTracking';
 
 interface CompressPdfToolProps {
   onClose: () => void;
@@ -13,6 +14,7 @@ const CompressPdfTool = ({ onClose }: CompressPdfToolProps) => {
   const [files, setFiles] = useState<File[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
   const [compressionLevel, setCompressionLevel] = useState<'low' | 'medium' | 'high'>('medium');
+  const { trackUsage } = useUsageTracking();
 
   const handleFilesSelected = useCallback((newFiles: File[]) => {
     setFiles(newFiles);
@@ -57,6 +59,9 @@ const CompressPdfTool = ({ onClose }: CompressPdfToolProps) => {
       link.click();
       
       URL.revokeObjectURL(url);
+      
+      // Track usage
+      trackUsage('Compress PDF', file.name);
       
       if (compressedSize < originalSize) {
         toast.success(`Compressed! Reduced by ${reduction}%`);

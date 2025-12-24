@@ -4,6 +4,7 @@ import FileDropzone from '../FileDropzone';
 import ProcessingOverlay from '../ProcessingOverlay';
 import { toast } from 'sonner';
 import { extractPdfText, generateSmartSummary, ExtractedPDF } from '@/lib/pdfTextExtractor';
+import { useUsageTracking } from '@/hooks/useUsageTracking';
 
 interface SmartSummaryToolProps {
   onClose: () => void;
@@ -19,7 +20,7 @@ const SmartSummaryTool = ({ onClose }: SmartSummaryToolProps) => {
     pageCount: number;
     title: string;
   } | null>(null);
-
+  const { trackUsage } = useUsageTracking();
   const handleFilesSelected = useCallback((newFiles: File[]) => {
     setFiles(newFiles);
     setResult(null);
@@ -47,10 +48,8 @@ const SmartSummaryTool = ({ onClose }: SmartSummaryToolProps) => {
         title: extracted.title || files[0].name
       });
       
-      // Add to history
-      if (typeof window !== 'undefined' && (window as any).addPdfToolsHistory) {
-        (window as any).addPdfToolsHistory('Smart Summary', files[0].name);
-      }
+      // Track usage to database
+      trackUsage('Smart Summary', files[0].name);
       
       toast.success('Analysis complete!');
     } catch (error) {

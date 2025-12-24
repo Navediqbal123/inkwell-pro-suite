@@ -4,6 +4,7 @@ import { Download } from 'lucide-react';
 import FileDropzone from '../FileDropzone';
 import ProcessingOverlay from '../ProcessingOverlay';
 import { toast } from 'sonner';
+import { useUsageTracking } from '@/hooks/useUsageTracking';
 
 interface ImageToPdfToolProps {
   onClose: () => void;
@@ -12,6 +13,7 @@ interface ImageToPdfToolProps {
 const ImageToPdfTool = ({ onClose }: ImageToPdfToolProps) => {
   const [files, setFiles] = useState<File[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
+  const { trackUsage } = useUsageTracking();
 
   const handleFilesSelected = useCallback((newFiles: File[]) => {
     setFiles(newFiles);
@@ -79,6 +81,10 @@ const ImageToPdfTool = ({ onClose }: ImageToPdfToolProps) => {
       link.click();
       
       URL.revokeObjectURL(url);
+      
+      // Track usage
+      trackUsage('Image to PDF', files.map(f => f.name).join(', '));
+      
       toast.success('PDF created successfully!');
       onClose();
     } catch (error) {

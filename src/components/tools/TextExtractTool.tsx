@@ -4,6 +4,7 @@ import FileDropzone from '../FileDropzone';
 import ProcessingOverlay from '../ProcessingOverlay';
 import { toast } from 'sonner';
 import { extractPdfText, cleanExtractedText } from '@/lib/pdfTextExtractor';
+import { useUsageTracking } from '@/hooks/useUsageTracking';
 
 interface TextExtractToolProps {
   onClose: () => void;
@@ -15,7 +16,7 @@ const TextExtractTool = ({ onClose }: TextExtractToolProps) => {
   const [extractedText, setExtractedText] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
   const [pageCount, setPageCount] = useState(0);
-
+  const { trackUsage } = useUsageTracking();
   const handleFilesSelected = useCallback((newFiles: File[]) => {
     setFiles(newFiles);
     setExtractedText(null);
@@ -40,10 +41,8 @@ const TextExtractTool = ({ onClose }: TextExtractToolProps) => {
       setExtractedText(cleaned);
       setPageCount(extracted.totalPages);
       
-      // Add to history
-      if (typeof window !== 'undefined' && (window as any).addPdfToolsHistory) {
-        (window as any).addPdfToolsHistory('Text Extract', files[0].name);
-      }
+      // Track usage
+      trackUsage('Text Extract', files[0].name);
       
       toast.success('Text extracted successfully!');
     } catch (error) {
