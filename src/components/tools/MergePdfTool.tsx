@@ -4,6 +4,7 @@ import { Download, GripVertical } from 'lucide-react';
 import FileDropzone from '../FileDropzone';
 import ProcessingOverlay from '../ProcessingOverlay';
 import { toast } from 'sonner';
+import { useUsageTracking } from '@/hooks/useUsageTracking';
 
 interface MergePdfToolProps {
   onClose: () => void;
@@ -12,6 +13,7 @@ interface MergePdfToolProps {
 const MergePdfTool = ({ onClose }: MergePdfToolProps) => {
   const [files, setFiles] = useState<File[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
+  const { trackUsage } = useUsageTracking();
 
   const handleFilesSelected = useCallback((newFiles: File[]) => {
     setFiles(newFiles);
@@ -57,6 +59,10 @@ const MergePdfTool = ({ onClose }: MergePdfToolProps) => {
       link.click();
       
       URL.revokeObjectURL(url);
+      
+      // Track usage
+      trackUsage('Merge PDF', files.map(f => f.name).join(', '));
+      
       toast.success('PDFs merged successfully!');
       onClose();
     } catch (error) {

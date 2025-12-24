@@ -4,6 +4,7 @@ import FileDropzone from '../FileDropzone';
 import ProcessingOverlay from '../ProcessingOverlay';
 import { toast } from 'sonner';
 import { extractPdfText, suggestFileName } from '@/lib/pdfTextExtractor';
+import { useUsageTracking } from '@/hooks/useUsageTracking';
 
 interface FileNameSuggestToolProps {
   onClose: () => void;
@@ -15,7 +16,7 @@ const FileNameSuggestTool = ({ onClose }: FileNameSuggestToolProps) => {
   const [suggestions, setSuggestions] = useState<string[] | null>(null);
   const [selectedName, setSelectedName] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
-
+  const { trackUsage } = useUsageTracking();
   const handleFilesSelected = useCallback((newFiles: File[]) => {
     setFiles(newFiles);
     setSuggestions(null);
@@ -44,10 +45,8 @@ const FileNameSuggestTool = ({ onClose }: FileNameSuggestToolProps) => {
         setSelectedName(names[0]);
       }
       
-      // Add to history
-      if (typeof window !== 'undefined' && (window as any).addPdfToolsHistory) {
-        (window as any).addPdfToolsHistory('File Name Suggest', files[0].name);
-      }
+      // Track usage
+      trackUsage('Name Suggest', files[0].name);
       
       toast.success('Suggestions generated!');
     } catch (error) {

@@ -4,6 +4,7 @@ import FileDropzone from '../FileDropzone';
 import ProcessingOverlay from '../ProcessingOverlay';
 import { toast } from 'sonner';
 import { extractPdfText, searchPdfContent, ExtractedPDF } from '@/lib/pdfTextExtractor';
+import { useUsageTracking } from '@/hooks/useUsageTracking';
 
 interface SmartSearchToolProps {
   onClose: () => void;
@@ -18,7 +19,7 @@ const SmartSearchTool = ({ onClose }: SmartSearchToolProps) => {
     matches: { pageNumber: number; context: string; highlight: string }[]; 
     totalMatches: number 
   } | null>(null);
-
+  const { trackUsage } = useUsageTracking();
   const handleFilesSelected = useCallback((newFiles: File[]) => {
     setFiles(newFiles);
     setExtractedPdf(null);
@@ -43,10 +44,8 @@ const SmartSearchTool = ({ onClose }: SmartSearchToolProps) => {
       const extracted = await extractPdfText(files[0]);
       setExtractedPdf(extracted);
       
-      // Add to history
-      if (typeof window !== 'undefined' && (window as any).addPdfToolsHistory) {
-        (window as any).addPdfToolsHistory('Smart Search', files[0].name);
-      }
+      // Track usage
+      trackUsage('Smart Search', files[0].name);
       
       toast.success('Document loaded! Start searching.');
     } catch (error) {
