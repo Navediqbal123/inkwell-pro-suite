@@ -1,4 +1,5 @@
 import { FileText } from 'lucide-react';
+import UserMenu from './UserMenu';
 
 const Header = () => {
   return (
@@ -15,9 +16,12 @@ const Header = () => {
           </span>
         </div>
 
-        {/* Badge */}
-        <div className="px-3 py-1.5 rounded-full bg-secondary border border-border text-xs font-medium text-muted-foreground transition-all duration-500 ease-out hover:border-primary/20 hover:text-foreground/80">
-          v1.0
+        {/* Right Section: User Menu */}
+        <div className="flex items-center gap-4">
+          <div className="px-3 py-1.5 rounded-full bg-secondary border border-border text-xs font-medium text-muted-foreground transition-all duration-500 ease-out hover:border-primary/20 hover:text-foreground/80">
+            v1.0
+          </div>
+          <UserMenu />
         </div>
       </div>
     </header>
