@@ -491,3 +491,48 @@
 .press-effect:active {
   transform: scale(0.97);
 }
+
+/* Premium dropdown menu animations */
+@keyframes menuIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes menuOut {
+  from {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.95) translateY(-8px);
+  }
+}
+
+.animate-menu-in {
+  animation: menuIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-menu-out {
+  animation: menuOut 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Role badge pulse for admin */
+@keyframes badgePulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 hsl(45 100% 51% / 0.3);
+  }
+  50% {
+    box-shadow: 0 0 8px 2px hsl(45 100% 51% / 0.15);
+  }
+}
+
+.badge-admin-pulse {
+  animation: badgePulse 3s ease-in-out infinite;
+}
