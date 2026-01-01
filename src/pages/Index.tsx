@@ -79,11 +79,18 @@ const smartTools = [
 ];
 
 const Index = () => {
-  const [showSplash, setShowSplash] = useState(true);
+  const [showSplash, setShowSplash] = useState(() => {
+    // Only show splash on first app load in this session
+    if (sessionStorage.getItem('splashShown')) {
+      return false;
+    }
+    return true;
+  });
   const [activeTool, setActiveTool] = useState<ToolType>(null);
   const { history, addHistoryItem, clearHistory, removeHistoryItem } = useHistory();
 
   const handleSplashComplete = useCallback(() => {
+    sessionStorage.setItem('splashShown', 'true');
     setShowSplash(false);
   }, []);
 
