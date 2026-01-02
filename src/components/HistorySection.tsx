@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Clock, Trash2, FileText, Image, Layers, Minimize2, X, ChevronDown, ChevronUp } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Clock, Trash2, FileText, Image, Layers, Minimize2, X } from 'lucide-react';
 import { HistoryItem } from '@/hooks/useHistory';
 
 interface HistorySectionProps {
@@ -49,7 +49,7 @@ const HistoryPanel = ({ isOpen, onClose, history, onClearHistory, onRemoveItem }
 
   return (
     <div 
-      className="fixed inset-0 z-40 flex items-start justify-center pt-20 md:pt-28"
+      className="fixed inset-0 z-50 flex items-start justify-center pt-20 md:pt-28"
       onClick={onClose}
     >
       {/* Backdrop */}
@@ -149,88 +149,28 @@ const HistoryPanel = ({ isOpen, onClose, history, onClearHistory, onRemoveItem }
   );
 };
 
-interface HistoryButtonProps {
-  count: number;
-  onClick: () => void;
-}
-
-export const HistoryButton = ({ count, onClick }: HistoryButtonProps) => {
-  return (
-    <button
-      onClick={onClick}
-      className="group relative flex items-center gap-3 px-5 py-2.5 rounded-2xl bg-gradient-to-br from-card/90 to-secondary/80 border border-border/40 hover:border-primary/50 shadow-lg shadow-background/50 hover:shadow-primary/10 transition-all duration-500 overflow-hidden"
-    >
-      {/* Animated background gradient */}
-      <div className="absolute inset-0 bg-gradient-to-r from-primary/0 via-primary/5 to-primary/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000 ease-out" />
-      
-      {/* Outer glow ring */}
-      <div className="absolute -inset-0.5 rounded-2xl bg-gradient-to-br from-primary/20 via-accent/10 to-primary/20 opacity-0 group-hover:opacity-100 blur-sm transition-opacity duration-500" />
-      
-      {/* Inner content wrapper */}
-      <div className="relative flex items-center gap-3">
-        {/* Advanced icon container */}
-        <div className="relative">
-          {/* Rotating ring */}
-          <div className="absolute -inset-1 rounded-xl border border-dashed border-primary/30 opacity-0 group-hover:opacity-100 group-hover:animate-[spin_8s_linear_infinite] transition-opacity duration-500" />
-          
-          {/* Pulsing background */}
-          <div className="absolute inset-0 rounded-xl bg-primary/20 animate-pulse opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-          
-          {/* Icon wrapper with gradient */}
-          <div className="relative p-2 rounded-xl bg-gradient-to-br from-primary/15 via-primary/10 to-accent/15 border border-primary/25 group-hover:border-primary/50 group-hover:from-primary/25 group-hover:to-accent/25 transition-all duration-500">
-            {/* Clock icon with animation */}
-            <div className="relative">
-              <Clock 
-                className="w-4 h-4 text-primary group-hover:text-primary transition-all duration-500 group-hover:drop-shadow-[0_0_8px_hsl(var(--primary)/0.6)]" 
-                strokeWidth={1.75} 
-              />
-              {/* Tick animation overlay */}
-              <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                <div className="w-1 h-1 rounded-full bg-primary animate-ping" />
-              </div>
-            </div>
-          </div>
-        </div>
-        
-        {/* Text with gradient on hover */}
-        <span className="relative text-sm font-semibold text-foreground group-hover:text-primary transition-colors duration-300 tracking-wide">
-          History
-        </span>
-        
-        {/* Advanced count badge */}
-        {count > 0 && (
-          <div className="relative">
-            {/* Badge glow */}
-            <div className="absolute inset-0 rounded-full bg-primary/40 blur-md animate-pulse" />
-            <span className="relative flex items-center justify-center min-w-[22px] h-[22px] px-1.5 rounded-full bg-gradient-to-br from-primary to-primary/80 text-xs font-bold text-primary-foreground shadow-lg shadow-primary/30">
-              {count}
-            </span>
-          </div>
-        )}
-      </div>
-    </button>
-  );
-};
-
+// This component now only renders the panel, no floating button
 const HistorySection = ({ history, onClearHistory, onRemoveItem }: HistorySectionProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
-  return (
-    <>
-      {/* Floating History Button - positioned in hero area */}
-      <div className="absolute top-28 right-4 md:right-8 z-30">
-        <HistoryButton count={history.length} onClick={() => setIsOpen(true)} />
-      </div>
+  // Listen for custom event to open history panel from user menu
+  useEffect(() => {
+    const handleOpenHistory = () => {
+      setIsOpen(true);
+    };
 
-      {/* History Panel */}
-      <HistoryPanel
-        isOpen={isOpen}
-        onClose={() => setIsOpen(false)}
-        history={history}
-        onClearHistory={onClearHistory}
-        onRemoveItem={onRemoveItem}
-      />
-    </>
+    window.addEventListener('openHistoryPanel', handleOpenHistory);
+    return () => window.removeEventListener('openHistoryPanel', handleOpenHistory);
+  }, []);
+
+  return (
+    <HistoryPanel
+      isOpen={isOpen}
+      onClose={() => setIsOpen(false)}
+      history={history}
+      onClearHistory={onClearHistory}
+      onRemoveItem={onRemoveItem}
+    />
   );
 };
 

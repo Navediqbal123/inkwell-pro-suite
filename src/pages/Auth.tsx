@@ -5,18 +5,22 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
-import { FileText, Mail, Lock, ArrowRight, Loader2 } from 'lucide-react';
+import { FileText, Mail, Lock, ArrowRight, Loader2, User } from 'lucide-react';
 import { z } from 'zod';
 
 const emailSchema = z.string().email('Please enter a valid email address');
 const passwordSchema = z.string().min(6, 'Password must be at least 6 characters');
+const nameSchema = z.string().min(1, 'This field is required').max(50, 'Maximum 50 characters');
 
 const Auth = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
+  const [errors, setErrors] = useState<{ email?: string; password?: string; firstName?: string; lastName?: string }>({});
+  const [focusedField, setFocusedField] = useState<string | null>(null);
 
   const { signIn, signUp, user, isLoading } = useAuth();
   const navigate = useNavigate();
@@ -29,7 +33,7 @@ const Auth = () => {
   }, [user, isLoading, navigate]);
 
   const validateForm = () => {
-    const newErrors: { email?: string; password?: string } = {};
+    const newErrors: { email?: string; password?: string; firstName?: string; lastName?: string } = {};
 
     const emailResult = emailSchema.safeParse(email);
     if (!emailResult.success) {
@@ -39,6 +43,19 @@ const Auth = () => {
     const passwordResult = passwordSchema.safeParse(password);
     if (!passwordResult.success) {
       newErrors.password = passwordResult.error.errors[0].message;
+    }
+
+    // Only validate names for signup
+    if (!isLogin) {
+      const firstNameResult = nameSchema.safeParse(firstName);
+      if (!firstNameResult.success) {
+        newErrors.firstName = firstNameResult.error.errors[0].message;
+      }
+
+      const lastNameResult = nameSchema.safeParse(lastName);
+      if (!lastNameResult.success) {
+        newErrors.lastName = lastNameResult.error.errors[0].message;
+      }
     }
 
     setErrors(newErrors);
@@ -55,7 +72,7 @@ const Auth = () => {
     try {
       const { error } = isLogin 
         ? await signIn(email, password)
-        : await signUp(email, password);
+        : await signUp(email, password, firstName.trim(), lastName.trim());
 
       if (error) {
         let message = error.message;
@@ -90,6 +107,13 @@ const Auth = () => {
     }
   };
 
+  const toggleAuthMode = () => {
+    setIsLogin(!isLogin);
+    setErrors({});
+    setFirstName('');
+    setLastName('');
+  };
+
   if (isLoading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
@@ -110,25 +134,94 @@ const Auth = () => {
         {/* Logo */}
         <div className="text-center mb-8">
           <div className="inline-flex items-center gap-3 mb-4">
-            <div className="p-3 rounded-2xl bg-gradient-to-br from-primary/20 to-accent/20 border border-primary/30">
+            <div className="p-3 rounded-2xl bg-gradient-to-br from-primary/20 to-accent/20 border border-primary/30 transition-all duration-500 hover:scale-105">
               <FileText className="w-8 h-8 text-primary" strokeWidth={1.5} />
             </div>
           </div>
           <h1 className="text-2xl font-bold gradient-text-hero">PDF Tools Pro</h1>
-          <p className="text-muted-foreground mt-2">
+          <p className="text-muted-foreground mt-2 transition-all duration-500">
             {isLogin ? 'Welcome back' : 'Create your account'}
           </p>
         </div>
 
         {/* Auth Form */}
-        <div className="p-6 rounded-2xl bg-card/80 border border-border/50 shadow-2xl backdrop-blur-sm">
+        <div className="p-6 rounded-2xl bg-card/80 border border-border/50 shadow-2xl backdrop-blur-sm transition-all duration-500">
           <form onSubmit={handleSubmit} className="space-y-5">
+            {/* Name Fields - Only show for signup with animation */}
+            <div className={`space-y-5 overflow-hidden transition-all duration-500 ease-out ${isLogin ? 'max-h-0 opacity-0' : 'max-h-[200px] opacity-100'}`}>
+              <div className="grid grid-cols-2 gap-4">
+                {/* First Name */}
+                <div className="space-y-2">
+                  <Label 
+                    htmlFor="firstName" 
+                    className={`text-sm font-medium transition-colors duration-300 ${focusedField === 'firstName' ? 'text-primary' : 'text-foreground'}`}
+                  >
+                    First Name
+                  </Label>
+                  <div className="relative group">
+                    <User className={`absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 transition-colors duration-300 ${focusedField === 'firstName' ? 'text-primary' : 'text-muted-foreground'}`} />
+                    <Input
+                      id="firstName"
+                      type="text"
+                      value={firstName}
+                      onChange={(e) => {
+                        setFirstName(e.target.value);
+                        if (errors.firstName) setErrors({ ...errors, firstName: undefined });
+                      }}
+                      onFocus={() => setFocusedField('firstName')}
+                      onBlur={() => setFocusedField(null)}
+                      placeholder="Naved"
+                      className="pl-10 h-12 bg-secondary/50 border-border/50 focus:border-primary/50 transition-all duration-300 focus:shadow-[0_0_20px_hsl(var(--primary)/0.15)]"
+                      disabled={isSubmitting}
+                    />
+                  </div>
+                  {errors.firstName && (
+                    <p className="text-xs text-destructive animate-fade-in">{errors.firstName}</p>
+                  )}
+                </div>
+
+                {/* Last Name */}
+                <div className="space-y-2">
+                  <Label 
+                    htmlFor="lastName" 
+                    className={`text-sm font-medium transition-colors duration-300 ${focusedField === 'lastName' ? 'text-primary' : 'text-foreground'}`}
+                  >
+                    Last Name
+                  </Label>
+                  <div className="relative group">
+                    <User className={`absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 transition-colors duration-300 ${focusedField === 'lastName' ? 'text-primary' : 'text-muted-foreground'}`} />
+                    <Input
+                      id="lastName"
+                      type="text"
+                      value={lastName}
+                      onChange={(e) => {
+                        setLastName(e.target.value);
+                        if (errors.lastName) setErrors({ ...errors, lastName: undefined });
+                      }}
+                      onFocus={() => setFocusedField('lastName')}
+                      onBlur={() => setFocusedField(null)}
+                      placeholder="Ahmad"
+                      className="pl-10 h-12 bg-secondary/50 border-border/50 focus:border-primary/50 transition-all duration-300 focus:shadow-[0_0_20px_hsl(var(--primary)/0.15)]"
+                      disabled={isSubmitting}
+                    />
+                  </div>
+                  {errors.lastName && (
+                    <p className="text-xs text-destructive animate-fade-in">{errors.lastName}</p>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* Email */}
             <div className="space-y-2">
-              <Label htmlFor="email" className="text-sm font-medium text-foreground">
+              <Label 
+                htmlFor="email" 
+                className={`text-sm font-medium transition-colors duration-300 ${focusedField === 'email' ? 'text-primary' : 'text-foreground'}`}
+              >
                 Email
               </Label>
-              <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+              <div className="relative group">
+                <Mail className={`absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 transition-colors duration-300 ${focusedField === 'email' ? 'text-primary' : 'text-muted-foreground'}`} />
                 <Input
                   id="email"
                   type="email"
@@ -137,8 +230,10 @@ const Auth = () => {
                     setEmail(e.target.value);
                     if (errors.email) setErrors({ ...errors, email: undefined });
                   }}
+                  onFocus={() => setFocusedField('email')}
+                  onBlur={() => setFocusedField(null)}
                   placeholder="you@example.com"
-                  className="pl-10 h-12 bg-secondary/50 border-border/50 focus:border-primary/50"
+                  className="pl-10 h-12 bg-secondary/50 border-border/50 focus:border-primary/50 transition-all duration-300 focus:shadow-[0_0_20px_hsl(var(--primary)/0.15)]"
                   disabled={isSubmitting}
                 />
               </div>
@@ -147,12 +242,16 @@ const Auth = () => {
               )}
             </div>
 
+            {/* Password */}
             <div className="space-y-2">
-              <Label htmlFor="password" className="text-sm font-medium text-foreground">
+              <Label 
+                htmlFor="password" 
+                className={`text-sm font-medium transition-colors duration-300 ${focusedField === 'password' ? 'text-primary' : 'text-foreground'}`}
+              >
                 Password
               </Label>
-              <div className="relative">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+              <div className="relative group">
+                <Lock className={`absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 transition-colors duration-300 ${focusedField === 'password' ? 'text-primary' : 'text-muted-foreground'}`} />
                 <Input
                   id="password"
                   type="password"
@@ -161,8 +260,10 @@ const Auth = () => {
                     setPassword(e.target.value);
                     if (errors.password) setErrors({ ...errors, password: undefined });
                   }}
+                  onFocus={() => setFocusedField('password')}
+                  onBlur={() => setFocusedField(null)}
                   placeholder="••••••••"
-                  className="pl-10 h-12 bg-secondary/50 border-border/50 focus:border-primary/50"
+                  className="pl-10 h-12 bg-secondary/50 border-border/50 focus:border-primary/50 transition-all duration-300 focus:shadow-[0_0_20px_hsl(var(--primary)/0.15)]"
                   disabled={isSubmitting}
                 />
               </div>
@@ -173,7 +274,7 @@ const Auth = () => {
 
             <Button
               type="submit"
-              className="w-full h-12 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold rounded-xl transition-all duration-300 group"
+              className="w-full h-12 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold rounded-xl transition-all duration-300 group press-effect hover:shadow-[0_8px_30px_hsl(var(--primary)/0.35)]"
               disabled={isSubmitting}
             >
               {isSubmitting ? (
@@ -189,15 +290,12 @@ const Auth = () => {
 
           <div className="mt-6 text-center">
             <button
-              onClick={() => {
-                setIsLogin(!isLogin);
-                setErrors({});
-              }}
+              onClick={toggleAuthMode}
               className="text-sm text-muted-foreground hover:text-foreground transition-colors duration-300"
               disabled={isSubmitting}
             >
               {isLogin ? "Don't have an account? " : 'Already have an account? '}
-              <span className="text-primary font-semibold">
+              <span className="text-primary font-semibold hover:underline">
                 {isLogin ? 'Sign Up' : 'Sign In'}
               </span>
             </button>
