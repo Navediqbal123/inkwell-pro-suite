@@ -541,6 +541,22 @@
   animation: badgePulse 3s ease-in-out infinite;
 }
 
+/* Badge fade-in animation */
+@keyframes badgeFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-badge-fade-in {
+  animation: badgeFadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
 /* Panel slide up animation */
 @keyframes panelSlideUp {
   from {
