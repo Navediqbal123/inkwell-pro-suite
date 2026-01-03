@@ -4,7 +4,7 @@ import UserMenu from './UserMenu';
 const Header = () => {
   return (
     <header className="fixed top-0 left-0 right-0 z-40 border-b border-border/20 bg-background/85 backdrop-blur-2xl animate-fade-in" style={{ animationDelay: '0.05s', animationFillMode: 'backwards' }}>
-      <div className="container mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl h-16 flex items-center justify-between">
         {/* Logo Section */}
         <div className="flex items-center gap-3 hover-lift cursor-pointer group">
           <div className="relative p-2.5 rounded-xl bg-gradient-to-br from-primary/15 to-accent/10 border border-primary/20 transition-all duration-500 ease-out group-hover:border-primary/40 group-hover:shadow-[0_0_25px_hsl(var(--primary)/0.2)]">
