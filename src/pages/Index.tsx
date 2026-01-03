@@ -150,8 +150,8 @@ const Index = () => {
 
         <Header />
 
-        <main className="relative pt-28 pb-20 px-4 sm:px-6 lg:px-8">
-          <div className="container mx-auto max-w-4xl lg:max-w-6xl xl:max-w-7xl">
+        <main className="relative pt-24 sm:pt-28 pb-16 sm:pb-20 px-4 sm:px-6 lg:px-8 xl:px-12">
+          <div className="w-full max-w-[1600px] mx-auto">
             {/* Hero Section */}
             <div className="text-center mb-20 space-y-8">
               <div className="animate-fade-in-scale" style={{ animationDelay: '0.15s', animationFillMode: 'backwards' }}>
@@ -176,8 +176,8 @@ const Index = () => {
               </p>
             </div>
 
-            {/* Tools Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
+            {/* Tools Grid - Responsive: 1 col mobile, 2 col tablet, 4 col desktop */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-5 lg:gap-6">
               {tools.map((tool, index) => (
                 <ToolCard
                   key={tool.id}
@@ -185,7 +185,7 @@ const Index = () => {
                   title={tool.title}
                   description={tool.description}
                   onClick={() => handleToolClick(tool.id)}
-                  delay={550 + index * 120}
+                  delay={550 + index * 80}
                 />
               ))}
             </div>
@@ -208,29 +208,17 @@ const Index = () => {
                 </p>
               </div>
 
-              {/* Smart Tools Grid */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
+              {/* Smart Tools Grid - Same card design as PDF tools */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 md:gap-5 lg:gap-6">
                 {smartTools.map((tool, index) => (
-                  <button
+                  <ToolCard
                     key={tool.id}
+                    icon={tool.icon}
+                    title={tool.title}
+                    description={tool.description}
                     onClick={() => handleToolClick(tool.id)}
-                    className="group p-5 rounded-2xl bg-card/80 border border-border/50 hover:border-accent/40 transition-all duration-500 ease-out text-left animate-fade-in-scale hover:-translate-y-2 hover:shadow-[0_20px_50px_rgba(0,0,0,0.4),0_0_40px_hsl(var(--accent)/0.06)] press-effect"
-                    style={{ animationDelay: `${1.2 + index * 0.1}s`, animationFillMode: 'backwards' }}
-                  >
-                    <div className="flex items-start gap-4">
-                      <div className="p-2.5 rounded-xl bg-accent/15 border border-accent/25 group-hover:bg-accent/25 group-hover:border-accent/40 transition-all duration-500 ease-out">
-                        <tool.icon className="w-5 h-5 text-accent group-hover:scale-110 transition-transform duration-500 ease-out group-hover:drop-shadow-[0_0_10px_hsl(var(--accent)/0.4)]" strokeWidth={1.5} />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <h3 className="font-semibold text-foreground mb-1 group-hover:text-accent transition-colors duration-500 ease-out">
-                          {tool.title}
-                        </h3>
-                        <p className="text-xs text-muted-foreground leading-relaxed group-hover:text-foreground/60 transition-colors duration-500 ease-out">
-                          {tool.description}
-                        </p>
-                      </div>
-                    </div>
-                  </button>
+                    delay={1200 + index * 80}
+                  />
                 ))}
               </div>
             </div>

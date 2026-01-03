@@ -70,8 +70,17 @@ const UserMenu = () => {
     );
   }
 
-  // Get avatar letter from email
-  const getAvatarLetter = () => {
+  // Get avatar initials from first + last name
+  const getAvatarInitials = () => {
+    const firstName = profile?.first_name || '';
+    const lastName = profile?.last_name || '';
+    const firstInitial = firstName.charAt(0).toUpperCase();
+    const lastInitial = lastName.charAt(0).toUpperCase();
+    
+    if (firstInitial && lastInitial) {
+      return `${firstInitial}${lastInitial}`;
+    }
+    if (firstInitial) return firstInitial;
     return user.email?.charAt(0).toUpperCase() || 'U';
   };
 
@@ -87,7 +96,7 @@ const UserMenu = () => {
     return user.email?.split('@')[0] || 'User';
   };
 
-  const avatarLetter = getAvatarLetter();
+  const avatarInitials = getAvatarInitials();
   const displayName = getDisplayName();
 
   return (
@@ -103,10 +112,10 @@ const UserMenu = () => {
           ${isOpen ? 'border-primary/30 bg-secondary/70 shadow-lg shadow-primary/5' : ''}
         `}
       >
-        {/* Avatar with Scale-in Animation */}
+        {/* Avatar with Scale-in Animation - Shows First + Last name initials */}
         <div 
           className={`
-            relative w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold 
+            relative w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center text-xs sm:text-sm font-bold 
             transition-all duration-500 ease-out
             ${avatarLoaded ? 'scale-100 opacity-100' : 'scale-75 opacity-0'}
             ${isAdmin 
@@ -117,7 +126,7 @@ const UserMenu = () => {
         >
           {/* Inner glow overlay */}
           <div className="absolute inset-0 rounded-full bg-gradient-to-t from-transparent to-white/20 opacity-60" />
-          <span className="relative z-10 drop-shadow-sm">{avatarLetter}</span>
+          <span className="relative z-10 drop-shadow-sm">{avatarInitials}</span>
         </div>
         
         <ChevronDown 
@@ -145,10 +154,10 @@ const UserMenu = () => {
           {/* User Info Header */}
           <div className="px-3.5 py-4 mb-2 rounded-xl bg-gradient-to-br from-secondary/60 to-secondary/30 border border-border/20">
             <div className="flex items-center gap-3.5">
-              {/* Large Avatar */}
+              {/* Large Avatar - Shows First + Last name initials */}
               <div 
                 className={`
-                  relative w-12 h-12 rounded-full flex items-center justify-center text-lg font-bold
+                  relative w-12 h-12 rounded-full flex items-center justify-center text-base font-bold
                   transition-all duration-500
                   ${isAdmin 
                     ? 'bg-gradient-to-br from-amber-400 via-amber-500 to-purple-500 text-white shadow-lg shadow-amber-500/30' 
@@ -157,7 +166,7 @@ const UserMenu = () => {
                 `}
               >
                 <div className="absolute inset-0 rounded-full bg-gradient-to-t from-transparent to-white/20 opacity-60" />
-                <span className="relative z-10 drop-shadow-sm">{avatarLetter}</span>
+                <span className="relative z-10 drop-shadow-sm">{avatarInitials}</span>
               </div>
               
               <div className="flex-1 min-w-0">
