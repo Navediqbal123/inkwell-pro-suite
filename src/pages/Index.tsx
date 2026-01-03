@@ -150,8 +150,8 @@ const Index = () => {
 
         <Header />
 
-        <main className="relative pt-28 pb-20 px-4">
-          <div className="container mx-auto max-w-4xl">
+        <main className="relative pt-28 pb-20 px-4 sm:px-6 lg:px-8">
+          <div className="container mx-auto max-w-4xl lg:max-w-6xl xl:max-w-7xl">
             {/* Hero Section */}
             <div className="text-center mb-20 space-y-8">
               <div className="animate-fade-in-scale" style={{ animationDelay: '0.15s', animationFillMode: 'backwards' }}>
@@ -177,7 +177,7 @@ const Index = () => {
             </div>
 
             {/* Tools Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
               {tools.map((tool, index) => (
                 <ToolCard
                   key={tool.id}
@@ -209,7 +209,7 @@ const Index = () => {
               </div>
 
               {/* Smart Tools Grid */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
                 {smartTools.map((tool, index) => (
                   <button
                     key={tool.id}
