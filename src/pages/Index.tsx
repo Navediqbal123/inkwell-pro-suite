@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { ImageIcon, FileImage, Layers, Minimize2, Shield, Sparkles, FileText, Highlighter, Search, Tag, Cpu } from 'lucide-react';
+import { ImageIcon, FileImage, Layers, Minimize2, Shield, Sparkles, FileText, Highlighter, Search, Tag, Cpu, MessageSquare, Brain } from 'lucide-react';
 import SplashScreen from '@/components/SplashScreen';
 import Header from '@/components/Header';
 import ToolCard from '@/components/ToolCard';
@@ -14,9 +14,11 @@ import TextExtractTool from '@/components/tools/TextExtractTool';
 import KeyPointsTool from '@/components/tools/KeyPointsTool';
 import SmartSearchTool from '@/components/tools/SmartSearchTool';
 import FileNameSuggestTool from '@/components/tools/FileNameSuggestTool';
+import ChatWithPdfTool from '@/components/tools/ChatWithPdfTool';
+import PdfSummaryTool from '@/components/tools/PdfSummaryTool';
 import { useHistory } from '@/hooks/useHistory';
 
-type ToolType = 'image-to-pdf' | 'pdf-to-image' | 'merge-pdf' | 'compress-pdf' | 'smart-summary' | 'text-extract' | 'key-points' | 'smart-search' | 'file-name-suggest' | null;
+type ToolType = 'image-to-pdf' | 'pdf-to-image' | 'merge-pdf' | 'compress-pdf' | 'smart-summary' | 'text-extract' | 'key-points' | 'smart-search' | 'file-name-suggest' | 'chat-with-pdf' | 'pdf-summary-ai' | null;
 
 const tools = [
   {
@@ -42,6 +44,21 @@ const tools = [
     icon: Minimize2,
     title: 'Compress PDF',
     description: 'Reduce PDF file size while maintaining quality',
+  },
+];
+
+const aiTools = [
+  {
+    id: 'chat-with-pdf' as const,
+    icon: MessageSquare,
+    title: 'Chat with PDF',
+    description: 'Ask questions about your document using AI',
+  },
+  {
+    id: 'pdf-summary-ai' as const,
+    icon: Brain,
+    title: 'AI Summary',
+    description: 'Get intelligent summaries powered by AI',
   },
 ];
 
@@ -127,13 +144,17 @@ const Index = () => {
         return <SmartSearchTool onClose={handleCloseModal} />;
       case 'file-name-suggest':
         return <FileNameSuggestTool onClose={handleCloseModal} />;
+      case 'chat-with-pdf':
+        return <ChatWithPdfTool onClose={handleCloseModal} />;
+      case 'pdf-summary-ai':
+        return <PdfSummaryTool onClose={handleCloseModal} />;
       default:
         return null;
     }
   };
 
   const getToolTitle = () => {
-    const tool = tools.find((t) => t.id === activeTool) || smartTools.find((t) => t.id === activeTool);
+    const tool = tools.find((t) => t.id === activeTool) || aiTools.find((t) => t.id === activeTool) || smartTools.find((t) => t.id === activeTool);
     return tool?.title || '';
   };
 
@@ -190,10 +211,43 @@ const Index = () => {
               ))}
             </div>
 
-            {/* Smart Tools Section */}
-            <div className="mt-20 animate-fade-in" style={{ animationDelay: '1s', animationFillMode: 'backwards' }}>
+            {/* AI Tools Section */}
+            <div className="mt-20 animate-fade-in" style={{ animationDelay: '0.9s', animationFillMode: 'backwards' }}>
               {/* Section Header */}
-              <div className="text-center mb-10 animate-fade-in-scale" style={{ animationDelay: '1.1s', animationFillMode: 'backwards' }}>
+              <div className="text-center mb-10 animate-fade-in-scale" style={{ animationDelay: '0.95s', animationFillMode: 'backwards' }}>
+                <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-gradient-to-r from-primary/15 to-accent/15 border border-primary/30 mb-6 hover-lift">
+                  <Brain className="w-4 h-4 text-primary animate-soft-float" />
+                  <span className="text-sm font-semibold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent uppercase tracking-wider">
+                    AI Powered
+                  </span>
+                </div>
+                <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-3">
+                  AI Document Tools
+                </h2>
+                <p className="text-muted-foreground max-w-md mx-auto">
+                  Powered by advanced AI — ask questions and get intelligent summaries
+                </p>
+              </div>
+
+              {/* AI Tools Grid */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-5 lg:gap-6 max-w-2xl mx-auto">
+                {aiTools.map((tool, index) => (
+                  <ToolCard
+                    key={tool.id}
+                    icon={tool.icon}
+                    title={tool.title}
+                    description={tool.description}
+                    onClick={() => handleToolClick(tool.id)}
+                    delay={1000 + index * 80}
+                  />
+                ))}
+              </div>
+            </div>
+
+            {/* Smart Tools Section */}
+            <div className="mt-20 animate-fade-in" style={{ animationDelay: '1.2s', animationFillMode: 'backwards' }}>
+              {/* Section Header */}
+              <div className="text-center mb-10 animate-fade-in-scale" style={{ animationDelay: '1.25s', animationFillMode: 'backwards' }}>
                 <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-accent/15 border border-accent/30 mb-6 hover-lift">
                   <Cpu className="w-4 h-4 text-accent animate-soft-float" />
                   <span className="text-sm font-semibold text-accent uppercase tracking-wider">
@@ -217,7 +271,7 @@ const Index = () => {
                     title={tool.title}
                     description={tool.description}
                     onClick={() => handleToolClick(tool.id)}
-                    delay={1200 + index * 80}
+                    delay={1400 + index * 80}
                   />
                 ))}
               </div>
