@@ -588,3 +588,71 @@
 .animate-history-slide {
   animation: historySlide 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
+
+/* Avatar generation animations */
+@keyframes avatarBounce {
+  0%, 100% {
+    transform: translateY(0) rotate(-5deg);
+  }
+  25% {
+    transform: translateY(-6px) rotate(5deg);
+  }
+  50% {
+    transform: translateY(0) rotate(-3deg);
+  }
+  75% {
+    transform: translateY(-4px) rotate(3deg);
+  }
+}
+
+@keyframes floatParticle {
+  0%, 100% {
+    transform: translateY(0) translateX(0);
+    opacity: 0.6;
+  }
+  50% {
+    transform: translateY(-8px) translateX(4px);
+    opacity: 1;
+  }
+}
+
+@keyframes floatParticleDelayed {
+  0%, 100% {
+    transform: translateY(0) translateX(0);
+    opacity: 0.5;
+  }
+  50% {
+    transform: translateY(-6px) translateX(-4px);
+    opacity: 0.9;
+  }
+}
+
+.animate-avatar-bounce {
+  animation: avatarBounce 1.5s ease-in-out infinite;
+}
+
+.animate-float-particle {
+  animation: floatParticle 2s ease-in-out infinite;
+}
+
+.animate-float-particle-delayed {
+  animation: floatParticleDelayed 2.5s ease-in-out infinite;
+}
+
+/* Custom scrollbar for chat */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: hsl(var(--border));
+  border-radius: 3px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--muted-foreground) / 0.3);
+}
