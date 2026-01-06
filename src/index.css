@@ -657,7 +657,238 @@
   background: hsl(var(--muted-foreground) / 0.3);
 }
 
-/* Pulse slow animation for splash screen */
+/* ======================================
+   ADVANCED SPLASH SCREEN ANIMATIONS
+   ====================================== */
+
+/* Floating orb animations */
+@keyframes splashOrb1 {
+  0%, 100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.3;
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.1);
+    opacity: 0.4;
+  }
+}
+
+@keyframes splashOrb2 {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.2;
+  }
+  33% {
+    transform: translate(-20px, 20px) scale(1.05);
+    opacity: 0.25;
+  }
+  66% {
+    transform: translate(20px, -10px) scale(0.95);
+    opacity: 0.15;
+  }
+}
+
+@keyframes splashOrb3 {
+  0%, 100% {
+    transform: translate(0, 0);
+    opacity: 0.15;
+  }
+  50% {
+    transform: translate(30px, -20px);
+    opacity: 0.2;
+  }
+}
+
+.animate-splash-orb-1 {
+  animation: splashOrb1 8s ease-in-out infinite;
+}
+
+.animate-splash-orb-2 {
+  animation: splashOrb2 10s ease-in-out infinite;
+}
+
+.animate-splash-orb-3 {
+  animation: splashOrb3 12s ease-in-out infinite;
+}
+
+/* Floating particles */
+@keyframes splashParticle {
+  0%, 100% {
+    transform: translateY(0) translateX(0);
+    opacity: 0.3;
+  }
+  25% {
+    transform: translateY(-30px) translateX(10px);
+    opacity: 0.6;
+  }
+  50% {
+    transform: translateY(-60px) translateX(-5px);
+    opacity: 0.4;
+  }
+  75% {
+    transform: translateY(-30px) translateX(-15px);
+    opacity: 0.5;
+  }
+}
+
+.animate-splash-particle {
+  animation: splashParticle 8s ease-in-out infinite;
+}
+
+/* Logo glow animations */
+@keyframes splashGlow1 {
+  0%, 100% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(1.1);
+  }
+}
+
+@keyframes splashGlow2 {
+  0%, 100% {
+    opacity: 0.2;
+    transform: scale(1.1);
+  }
+  50% {
+    opacity: 0.35;
+    transform: scale(1);
+  }
+}
+
+.animate-splash-glow-1 {
+  animation: splashGlow1 3s ease-in-out infinite;
+}
+
+.animate-splash-glow-2 {
+  animation: splashGlow2 4s ease-in-out infinite;
+}
+
+/* Logo float animation */
+@keyframes splashLogoFloat {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  25% {
+    transform: translateY(-6px) rotate(1deg);
+  }
+  75% {
+    transform: translateY(-3px) rotate(-1deg);
+  }
+}
+
+.animate-splash-logo-float {
+  animation: splashLogoFloat 4s ease-in-out infinite;
+}
+
+/* Shine effect */
+@keyframes splashShine {
+  0% {
+    background-position: -200% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
+}
+
+.animate-splash-shine {
+  animation: splashShine 3s ease-in-out infinite;
+}
+
+/* Pulse for brain icon */
+@keyframes splashPulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.15);
+    opacity: 1;
+  }
+}
+
+.animate-splash-pulse {
+  animation: splashPulse 2s ease-in-out infinite;
+}
+
+/* Orbiting elements */
+@keyframes splashOrbit {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes splashOrbitReverse {
+  from {
+    transform: rotate(360deg);
+  }
+  to {
+    transform: rotate(0deg);
+  }
+}
+
+.animate-splash-orbit {
+  animation: splashOrbit 8s linear infinite;
+}
+
+.animate-splash-orbit-reverse {
+  animation: splashOrbitReverse 12s linear infinite;
+}
+
+/* Text shimmer */
+@keyframes splashTextShimmer {
+  0% {
+    background-position: 0% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
+}
+
+.animate-splash-text-shimmer {
+  animation: splashTextShimmer 4s linear infinite;
+}
+
+/* Progress bar background animation */
+@keyframes splashProgressBg {
+  0% {
+    background-position: -200% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
+}
+
+.animate-splash-progress-bg {
+  animation: splashProgressBg 2s linear infinite;
+}
+
+/* Feature pills pop in */
+@keyframes splashFeaturePop {
+  0% {
+    opacity: 0;
+    transform: scale(0.8) translateY(10px);
+  }
+  60% {
+    transform: scale(1.05) translateY(-2px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.animate-splash-feature-pop {
+  opacity: 0;
+  animation: splashFeaturePop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+/* Pulse slow animation */
 @keyframes pulseSlow {
   0%, 100% {
     opacity: 0.6;
