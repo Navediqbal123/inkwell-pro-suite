@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { FileText, Sparkles } from 'lucide-react';
+import { FileText, Sparkles, Zap, Brain, Layers } from 'lucide-react';
 
 interface SplashScreenProps {
   onComplete: () => void;
@@ -8,44 +8,41 @@ interface SplashScreenProps {
 const SplashScreen = ({ onComplete }: SplashScreenProps) => {
   const [isVisible, setIsVisible] = useState(true);
   const [isExiting, setIsExiting] = useState(false);
-  const [showLogo, setShowLogo] = useState(false);
-  const [showTitle, setShowTitle] = useState(false);
-  const [showTagline, setShowTagline] = useState(false);
-  const [showFeatures, setShowFeatures] = useState(false);
+  const [phase, setPhase] = useState(0);
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
-    // Staggered animations
-    const logoTimer = setTimeout(() => setShowLogo(true), 200);
-    const titleTimer = setTimeout(() => setShowTitle(true), 500);
-    const taglineTimer = setTimeout(() => setShowTagline(true), 800);
-    const featuresTimer = setTimeout(() => setShowFeatures(true), 1100);
+    // Staggered phase animations
+    const phase1 = setTimeout(() => setPhase(1), 100);   // Logo appears
+    const phase2 = setTimeout(() => setPhase(2), 600);   // Title appears
+    const phase3 = setTimeout(() => setPhase(3), 1000);  // Tagline appears
+    const phase4 = setTimeout(() => setPhase(4), 1400);  // Features appear
 
-    // Progress bar animation
+    // Smooth progress bar
     const progressInterval = setInterval(() => {
       setProgress((prev) => {
         if (prev >= 100) {
           clearInterval(progressInterval);
           return 100;
         }
-        return prev + 2;
+        return prev + 1.5;
       });
-    }, 35);
+    }, 30);
 
-    // Exit animation
+    // Exit sequence
     const exitTimer = setTimeout(() => {
       setIsExiting(true);
       setTimeout(() => {
         setIsVisible(false);
         onComplete();
-      }, 500);
-    }, 2800);
+      }, 600);
+    }, 3200);
 
     return () => {
-      clearTimeout(logoTimer);
-      clearTimeout(titleTimer);
-      clearTimeout(taglineTimer);
-      clearTimeout(featuresTimer);
+      clearTimeout(phase1);
+      clearTimeout(phase2);
+      clearTimeout(phase3);
+      clearTimeout(phase4);
       clearInterval(progressInterval);
       clearTimeout(exitTimer);
     };
@@ -55,121 +52,292 @@ const SplashScreen = ({ onComplete }: SplashScreenProps) => {
 
   return (
     <div
-      className={`fixed inset-0 z-50 flex flex-col items-center justify-center bg-background transition-all duration-500 ease-out ${
-        isExiting ? 'opacity-0 scale-105' : 'opacity-100 scale-100'
+      className={`fixed inset-0 z-50 flex flex-col items-center justify-center overflow-hidden transition-all duration-600 ease-out ${
+        isExiting ? 'opacity-0 scale-110' : 'opacity-100 scale-100'
       }`}
+      style={{
+        background: 'radial-gradient(ellipse at center, hsl(220 20% 8%) 0%, hsl(220 20% 4%) 50%, hsl(220 25% 2%) 100%)'
+      }}
     >
-      {/* Animated background effects */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      {/* Animated mesh gradient background */}
+      <div className="absolute inset-0 overflow-hidden">
+        {/* Primary orb */}
+        <div 
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full opacity-30 animate-splash-orb-1"
+          style={{
+            background: 'radial-gradient(circle, hsl(217 91% 60% / 0.4) 0%, transparent 70%)',
+            filter: 'blur(80px)'
+          }}
+        />
+        
+        {/* Secondary accent orb */}
+        <div 
+          className="absolute top-1/3 right-1/4 w-[500px] h-[500px] rounded-full opacity-20 animate-splash-orb-2"
+          style={{
+            background: 'radial-gradient(circle, hsl(250 85% 65% / 0.5) 0%, transparent 70%)',
+            filter: 'blur(60px)'
+          }}
+        />
+
+        {/* Tertiary orb */}
+        <div 
+          className="absolute bottom-1/4 left-1/4 w-[400px] h-[400px] rounded-full opacity-15 animate-splash-orb-3"
+          style={{
+            background: 'radial-gradient(circle, hsl(280 70% 55% / 0.4) 0%, transparent 70%)',
+            filter: 'blur(50px)'
+          }}
+        />
+
         {/* Floating particles */}
-        {[...Array(15)].map((_, i) => (
+        {[...Array(25)].map((_, i) => (
           <div
             key={i}
-            className="absolute w-1.5 h-1.5 rounded-full bg-primary/30 animate-float-particle"
+            className="absolute rounded-full animate-splash-particle"
             style={{
-              left: `${10 + Math.random() * 80}%`,
-              top: `${10 + Math.random() * 80}%`,
-              animationDelay: `${Math.random() * 3}s`,
-              animationDuration: `${4 + Math.random() * 3}s`,
+              width: `${2 + Math.random() * 4}px`,
+              height: `${2 + Math.random() * 4}px`,
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+              background: `hsl(${217 + Math.random() * 40} 80% 60% / ${0.3 + Math.random() * 0.4})`,
+              animationDelay: `${Math.random() * 4}s`,
+              animationDuration: `${5 + Math.random() * 5}s`,
             }}
           />
         ))}
 
-        {/* Primary glow orb */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-primary/8 blur-[120px] animate-pulse-slow" />
-        
-        {/* Secondary accent glow */}
-        <div className="absolute top-1/3 left-1/3 w-[400px] h-[400px] rounded-full bg-accent/5 blur-[100px] animate-breathe" />
+        {/* Grid overlay */}
+        <div 
+          className="absolute inset-0 opacity-[0.03]"
+          style={{
+            backgroundImage: `
+              linear-gradient(hsl(217 91% 60% / 0.3) 1px, transparent 1px),
+              linear-gradient(90deg, hsl(217 91% 60% / 0.3) 1px, transparent 1px)
+            `,
+            backgroundSize: '60px 60px'
+          }}
+        />
       </div>
 
       {/* Main content */}
-      <div className="relative z-10 flex flex-col items-center gap-6 px-6">
-        {/* Animated Logo Icon */}
+      <div className="relative z-10 flex flex-col items-center gap-8 px-6">
+        
+        {/* Advanced 3D Logo */}
         <div
-          className={`relative transition-all duration-700 ease-out ${
-            showLogo
+          className={`relative transition-all duration-1000 ease-out ${
+            phase >= 1
               ? 'opacity-100 scale-100 translate-y-0'
-              : 'opacity-0 scale-90 translate-y-6'
-          } ${isExiting ? 'scale-110 opacity-0' : ''}`}
+              : 'opacity-0 scale-75 translate-y-12'
+          } ${isExiting ? 'scale-125 opacity-0 blur-sm' : ''}`}
         >
-          {/* Glow ring */}
-          <div className="absolute inset-0 -m-4 rounded-3xl bg-primary/20 blur-xl animate-glow-pulse" />
-          
-          {/* Icon container */}
-          <div className="relative flex items-center justify-center w-24 h-24 md:w-28 md:h-28 rounded-2xl bg-gradient-to-br from-primary via-primary/90 to-accent shadow-2xl shadow-primary/40">
-            <FileText className="w-12 h-12 md:w-14 md:h-14 text-primary-foreground" strokeWidth={1.5} />
+          {/* Outer glow rings */}
+          <div className="absolute inset-0 -m-8">
+            <div className="absolute inset-0 rounded-3xl bg-primary/20 blur-2xl animate-splash-glow-1" />
+            <div className="absolute inset-0 rounded-3xl bg-accent/15 blur-3xl animate-splash-glow-2" />
+          </div>
+
+          {/* Logo container with 3D effect */}
+          <div className="relative group">
+            {/* Shadow layer */}
+            <div 
+              className="absolute inset-0 rounded-3xl bg-black/50 blur-xl translate-y-4 scale-95"
+            />
             
-            {/* Sparkle accent */}
-            <div className="absolute -top-2 -right-2 animate-soft-float">
-              <Sparkles className="w-6 h-6 text-accent drop-shadow-lg" />
+            {/* Main logo */}
+            <div 
+              className="relative w-28 h-28 md:w-36 md:h-36 rounded-3xl flex items-center justify-center overflow-hidden animate-splash-logo-float"
+              style={{
+                background: 'linear-gradient(135deg, hsl(217 91% 55%) 0%, hsl(250 85% 60%) 50%, hsl(280 75% 55%) 100%)',
+                boxShadow: `
+                  0 0 60px hsl(217 91% 60% / 0.4),
+                  0 20px 40px rgba(0,0,0,0.4),
+                  inset 0 2px 0 rgba(255,255,255,0.2),
+                  inset 0 -2px 0 rgba(0,0,0,0.2)
+                `
+              }}
+            >
+              {/* Inner gradient overlay */}
+              <div 
+                className="absolute inset-0 opacity-60"
+                style={{
+                  background: 'linear-gradient(180deg, rgba(255,255,255,0.15) 0%, transparent 50%, rgba(0,0,0,0.1) 100%)'
+                }}
+              />
+
+              {/* Icon stack for depth */}
+              <div className="relative">
+                <FileText 
+                  className="w-14 h-14 md:w-18 md:h-18 text-white drop-shadow-lg" 
+                  strokeWidth={1.5}
+                  style={{ filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.3))' }}
+                />
+                
+                {/* AI brain indicator */}
+                <div className="absolute -top-1 -right-1 p-1.5 rounded-full bg-white/20 backdrop-blur-sm animate-splash-pulse">
+                  <Brain className="w-3 h-3 md:w-4 md:h-4 text-white" />
+                </div>
+              </div>
+
+              {/* Animated shine effect */}
+              <div 
+                className="absolute inset-0 animate-splash-shine"
+                style={{
+                  background: 'linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.3) 50%, transparent 60%)',
+                  backgroundSize: '200% 100%'
+                }}
+              />
+            </div>
+
+            {/* Orbiting elements */}
+            <div className="absolute inset-0 -m-4 animate-splash-orbit">
+              <Sparkles className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-2 w-5 h-5 text-accent drop-shadow-lg" />
+            </div>
+            <div className="absolute inset-0 -m-6 animate-splash-orbit-reverse">
+              <Zap className="absolute bottom-0 right-0 w-4 h-4 text-primary drop-shadow-lg" />
             </div>
           </div>
         </div>
 
-        {/* Title with staggered letter animation */}
+        {/* Advanced Typography */}
         <div
-          className={`text-center transition-all duration-700 ease-out ${
-            showTitle
+          className={`text-center transition-all duration-1000 ease-out ${
+            phase >= 2
               ? 'opacity-100 translate-y-0'
-              : 'opacity-0 translate-y-6'
-          } ${isExiting ? 'opacity-0 translate-y-[-10px]' : ''}`}
+              : 'opacity-0 translate-y-8'
+          } ${isExiting ? 'opacity-0 translate-y-[-20px] blur-sm' : ''}`}
         >
-          <h1 className="text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight">
-            <span className="inline-block gradient-text-hero">PDF Tools</span>
-            <span className="text-foreground ml-3">Pro</span>
+          <h1 className="relative text-5xl md:text-7xl lg:text-8xl font-black tracking-tight">
+            {/* Background glow text */}
+            <span 
+              className="absolute inset-0 blur-xl opacity-50"
+              style={{
+                background: 'linear-gradient(135deg, hsl(217 91% 60%), hsl(250 85% 65%), hsl(280 75% 55%))',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text'
+              }}
+            >
+              PDF Tools Pro
+            </span>
+            
+            {/* Main gradient text */}
+            <span 
+              className="relative inline-block animate-splash-text-shimmer"
+              style={{
+                background: 'linear-gradient(135deg, hsl(0 0% 100%) 0%, hsl(217 91% 70%) 25%, hsl(250 85% 70%) 50%, hsl(280 75% 65%) 75%, hsl(0 0% 100%) 100%)',
+                backgroundSize: '200% auto',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text'
+              }}
+            >
+              PDF Tools
+            </span>
+            <span className="text-foreground ml-2 md:ml-4">Pro</span>
           </h1>
+
+          {/* Decorative line */}
+          <div 
+            className={`mx-auto mt-4 h-1 rounded-full transition-all duration-1000 delay-200 ${
+              phase >= 2 ? 'w-32 md:w-48 opacity-100' : 'w-0 opacity-0'
+            }`}
+            style={{
+              background: 'linear-gradient(90deg, transparent, hsl(217 91% 60%), hsl(250 85% 65%), transparent)'
+            }}
+          />
         </div>
 
-        {/* Tagline */}
-        <p
-          className={`text-lg md:text-xl text-muted-foreground font-medium tracking-wide transition-all duration-600 ease-out ${
-            showTagline
+        {/* Tagline with typing effect feel */}
+        <div
+          className={`transition-all duration-800 ease-out ${
+            phase >= 3
               ? 'opacity-100 translate-y-0'
-              : 'opacity-0 translate-y-4'
+              : 'opacity-0 translate-y-6'
           } ${isExiting ? 'opacity-0' : ''}`}
         >
-          <span className="text-primary">AI-Powered</span> Professional PDF Solutions
-        </p>
-
-        {/* Progress bar */}
-        <div
-          className={`w-56 md:w-72 transition-all duration-500 ease-out ${
-            showTagline ? 'opacity-100' : 'opacity-0'
-          } ${isExiting ? 'opacity-0 scale-95' : ''}`}
-        >
-          <div className="h-1 bg-muted/30 rounded-full overflow-hidden backdrop-blur-sm">
-            <div
-              className="h-full bg-gradient-to-r from-primary via-accent to-primary rounded-full transition-all duration-75 ease-linear"
-              style={{ width: `${progress}%` }}
-            />
-          </div>
-          <p className="text-center text-xs text-muted-foreground mt-2 font-medium">
-            {progress < 100 ? 'Loading experience...' : 'Ready!'}
+          <p className="text-lg md:text-xl lg:text-2xl font-medium text-muted-foreground tracking-wide">
+            <span 
+              className="font-bold"
+              style={{
+                background: 'linear-gradient(135deg, hsl(217 91% 65%), hsl(250 85% 70%))',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text'
+              }}
+            >
+              AI-Powered
+            </span>
+            <span className="mx-2 text-muted-foreground/60">•</span>
+            <span>Professional PDF Solutions</span>
           </p>
         </div>
 
-        {/* Feature pills */}
+        {/* Premium Progress Bar */}
         <div
-          className={`flex flex-wrap justify-center gap-2 max-w-sm transition-all duration-600 ease-out ${
-            showFeatures
-              ? 'opacity-100 translate-y-0'
-              : 'opacity-0 translate-y-4'
-          } ${isExiting ? 'opacity-0 scale-95' : ''}`}
+          className={`w-64 md:w-80 transition-all duration-600 ${
+            phase >= 3 ? 'opacity-100' : 'opacity-0'
+          } ${isExiting ? 'opacity-0 scale-90' : ''}`}
         >
-          {['Chat with PDF', 'AI Summary', '3D Avatar'].map((feature, i) => (
-            <span
-              key={feature}
-              className="px-3 py-1.5 text-xs font-medium rounded-full bg-primary/10 text-primary border border-primary/20 animate-fade-in"
-              style={{ animationDelay: `${1.2 + i * 0.1}s` }}
+          <div className="relative h-1.5 bg-muted/20 rounded-full overflow-hidden backdrop-blur-sm">
+            {/* Animated background */}
+            <div className="absolute inset-0 opacity-30">
+              <div 
+                className="h-full animate-splash-progress-bg"
+                style={{
+                  background: 'linear-gradient(90deg, transparent, hsl(217 91% 60% / 0.5), transparent)',
+                  backgroundSize: '200% 100%'
+                }}
+              />
+            </div>
+            
+            {/* Progress fill */}
+            <div
+              className="absolute inset-y-0 left-0 rounded-full transition-all duration-100 ease-linear"
+              style={{ 
+                width: `${progress}%`,
+                background: 'linear-gradient(90deg, hsl(217 91% 60%), hsl(250 85% 65%), hsl(280 75% 55%))',
+                boxShadow: '0 0 20px hsl(217 91% 60% / 0.5)'
+              }}
+            />
+          </div>
+          
+          <p className="text-center text-xs text-muted-foreground mt-3 font-medium tracking-wider uppercase">
+            {progress < 100 ? 'Initializing Experience...' : '✓ Ready'}
+          </p>
+        </div>
+
+        {/* Feature Pills */}
+        <div
+          className={`flex flex-wrap justify-center gap-3 max-w-md transition-all duration-800 ${
+            phase >= 4
+              ? 'opacity-100 translate-y-0'
+              : 'opacity-0 translate-y-6'
+          } ${isExiting ? 'opacity-0 scale-90' : ''}`}
+        >
+          {[
+            { icon: Brain, label: 'Chat with PDF', delay: 0 },
+            { icon: Sparkles, label: 'AI Summary', delay: 0.1 },
+            { icon: Layers, label: '3D Avatar', delay: 0.2 },
+          ].map(({ icon: Icon, label, delay }) => (
+            <div
+              key={label}
+              className="flex items-center gap-2 px-4 py-2 rounded-full bg-card/50 border border-border/30 backdrop-blur-sm animate-splash-feature-pop"
+              style={{ 
+                animationDelay: `${1.5 + delay}s`,
+                boxShadow: '0 4px 20px rgba(0,0,0,0.2)'
+              }}
             >
-              {feature}
-            </span>
+              <Icon className="w-4 h-4 text-primary" />
+              <span className="text-sm font-medium text-foreground/90">{label}</span>
+            </div>
           ))}
         </div>
       </div>
 
-      {/* Bottom gradient line */}
-      <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
+      {/* Bottom gradient lines */}
+      <div className="absolute bottom-0 left-0 right-0">
+        <div className="h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent" />
+        <div className="h-8 bg-gradient-to-t from-primary/5 to-transparent" />
+      </div>
     </div>
   );
 };
